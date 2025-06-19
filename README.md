@@ -3,6 +3,7 @@
 A lightweight, zero-dependency **TypeScript library** for generating unique, deterministic star-themed IDs.
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mahirliy55/stellar-id)
 
@@ -14,6 +15,8 @@ A lightweight, zero-dependency **TypeScript library** for generating unique, det
 - ⚡ **Simple** - Single function with minimal configuration
 - 🌟 **Star-themed** - Uses real star names (SIRIUS, VEGA, ALTAIR, etc.)
 - 📦 **NPM Ready** - Ready to publish and install
+- 🎨 **Modern UI** - Beautiful web interface with Tailwind CSS
+- 📱 **Responsive** - Mobile-friendly design with glass morphism effects
 
 ## 🚀 Quick Start
 
@@ -105,12 +108,23 @@ python3 -m http.server 3000
 # Open http://localhost:3000 in your browser
 ```
 
+### 🎨 Web Interface Features
+
+The web interface includes:
+- **Modern Design**: Built with Tailwind CSS for a beautiful, responsive UI
+- **Glass Morphism**: Elegant glass-like effects with backdrop blur
+- **Interactive Elements**: Hover animations and smooth transitions
+- **Real-time Generation**: Instant ID generation with live preview
+- **Example Showcase**: Pre-generated examples to demonstrate the library
+- **Mobile Responsive**: Works perfectly on all device sizes
+
 ## 📁 Project Structure
 
 ```
 stellar-id/
 ├── src/
-│   └── index.ts          # Main TypeScript library
+│   ├── index.ts          # Main TypeScript library
+│   └── styles.css        # Tailwind CSS styles
 ├── dist/                 # Built files (auto-generated)
 │   ├── index.js          # CommonJS build
 │   ├── index.mjs         # ES Module build
@@ -118,11 +132,21 @@ stellar-id/
 ├── demo.js               # JavaScript demo
 ├── test.js               # JavaScript tests
 ├── test.ts               # TypeScript tests
-├── index.html            # Web interface
+├── index.html            # Web interface with Tailwind CSS
+├── tailwind.config.js    # Tailwind CSS configuration
+├── postcss.config.js     # PostCSS configuration
 ├── package.json          # NPM configuration
 ├── tsconfig.json         # TypeScript configuration
 └── README.md             # This file
 ```
+
+## 🎨 UI Technologies
+
+- **Tailwind CSS**: Utility-first CSS framework for rapid UI development
+- **Glass Morphism**: Modern design trend with transparency and blur effects
+- **Responsive Design**: Mobile-first approach with flexible layouts
+- **CSS Animations**: Smooth transitions and hover effects
+- **Gradient Backgrounds**: Beautiful cosmic-themed color schemes
 
 ## 🤝 Contributing
 

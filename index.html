@@ -4,101 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stellar ID Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+        .stellar-gradient {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: white;
         }
-        .container {
+        .glass-effect {
             background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 15px;
             backdrop-filter: blur(10px);
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-        }
-        .input-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-        button {
-            background: #4CAF50;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-right: 10px;
-        }
-        button:hover {
-            background: #45a049;
-        }
-        .result {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-family: monospace;
-            font-size: 18px;
-            text-align: center;
-        }
-        .examples {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-        .example-item {
-            margin: 10px 0;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>🌟 Stellar ID Generator</h1>
-        
-        <div class="input-group">
-            <label for="inputText">Enter your text:</label>
-            <input type="text" id="inputText" placeholder="e.g., my-project, user-123, etc.">
-        </div>
-        
-        <div class="input-group">
-            <label for="prefix">Custom prefix (optional):</label>
-            <input type="text" id="prefix" placeholder="STAR (default)">
-        </div>
-        
-        <button onclick="generateID()">Generate Stellar ID</button>
-        <button onclick="generateRandom()">Random Example</button>
-        
-        <div id="result" class="result" style="display: none;"></div>
-        
-        <div class="examples">
-            <h3>Example IDs:</h3>
-            <div id="examples"></div>
+<body class="stellar-gradient min-h-screen text-white font-sans">
+    <div class="max-w-4xl mx-auto p-6">
+        <div class="glass-effect rounded-2xl p-8 shadow-2xl">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-5xl font-bold mb-4 animate-float">
+                    🌟 Stellar ID Generator
+                </h1>
+                <p class="text-xl text-white/80">
+                    Generate unique, deterministic star-themed identifiers
+                </p>
+            </div>
+            
+            <!-- Input Form -->
+            <div class="space-y-6 mb-8">
+                <div>
+                    <label for="inputText" class="block text-lg font-semibold mb-3">
+                        Enter your text:
+                    </label>
+                    <input 
+                        type="text" 
+                        id="inputText" 
+                        placeholder="e.g., my-project, user-123, etc."
+                        class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all duration-300"
+                    >
+                </div>
+                
+                <div>
+                    <label for="prefix" class="block text-lg font-semibold mb-3">
+                        Custom prefix (optional):
+                    </label>
+                    <input 
+                        type="text" 
+                        id="prefix" 
+                        placeholder="STAR (default)"
+                        class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all duration-300"
+                    >
+                </div>
+                
+                <div class="flex flex-wrap gap-4">
+                    <button 
+                        onclick="generateID()"
+                        class="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    >
+                        🚀 Generate Stellar ID
+                    </button>
+                    <button 
+                        onclick="generateRandom()"
+                        class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    >
+                        🎲 Random Example
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Result -->
+            <div id="result" class="hidden">
+                <div class="glass-effect rounded-xl p-6 text-center">
+                    <h3 class="text-xl font-semibold mb-3">Generated ID:</h3>
+                    <div id="resultText" class="text-2xl font-mono text-yellow-300 break-all"></div>
+                </div>
+            </div>
+            
+            <!-- Examples -->
+            <div class="mt-8">
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-center">✨ Example IDs</h3>
+                    <div id="examples" class="space-y-3"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -121,8 +126,11 @@
         exampleInputs.forEach(input => {
             const id = generateStellarID(input);
             const div = document.createElement('div');
-            div.className = 'example-item';
-            div.innerHTML = `<strong>${input}</strong> → <span style="color: #FFD700;">${id}</span>`;
+            div.className = 'glass-effect rounded-lg p-4 flex justify-between items-center';
+            div.innerHTML = `
+                <span class="font-semibold">${input}</span>
+                <span class="text-yellow-300 font-mono">${id}</span>
+            `;
             examplesDiv.appendChild(div);
         });
         
@@ -139,8 +147,10 @@
             const result = generateStellarID(input, options);
             
             const resultDiv = document.getElementById('result');
-            resultDiv.textContent = result;
-            resultDiv.style.display = 'block';
+            const resultText = document.getElementById('resultText');
+            resultText.textContent = result;
+            resultDiv.classList.remove('hidden');
+            resultDiv.classList.add('animate-pulse-slow');
         };
         
         window.generateRandom = function() {

@@ -9,7 +9,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup src/index.ts --format cjs,esm --dts && npm run build:css",
+    "build:css": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -36,8 +37,11 @@
     "url": "https://github.com/mahirliy55/stellar-id/issues"
   },
   "devDependencies": {
-    "typescript": "^5.4.2",
+    "@types/node": "^20.11.25",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.10",
     "tsup": "^8.0.2",
-    "@types/node": "^20.11.25"
+    "typescript": "^5.4.2"
   }
-} 
+}
