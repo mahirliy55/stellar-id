@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar ID Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .result {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 18px;
+            text-align: center;
+        }
+        .examples {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .example-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌟 Stellar ID Generator</h1>
+        
+        <div class="input-group">
+            <label for="inputText">Enter your text:</label>
+            <input type="text" id="inputText" placeholder="e.g., my-project, user-123, etc.">
+        </div>
+        
+        <div class="input-group">
+            <label for="prefix">Custom prefix (optional):</label>
+            <input type="text" id="prefix" placeholder="STAR (default)">
+        </div>
+        
+        <button onclick="generateID()">Generate Stellar ID</button>
+        <button onclick="generateRandom()">Random Example</button>
+        
+        <div id="result" class="result" style="display: none;"></div>
+        
+        <div class="examples">
+            <h3>Example IDs:</h3>
+            <div id="examples"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the library (you'll need to serve this with a local server)
+        import { generateStellarID } from './dist/index.mjs';
+        
+        window.generateStellarID = generateStellarID;
+        
+        // Generate example IDs
+        const exampleInputs = [
+            'my-project',
+            'user-123',
+            'document-456',
+            'session-789',
+            'stellar-app'
+        ];
+        
+        const examplesDiv = document.getElementById('examples');
+        exampleInputs.forEach(input => {
+            const id = generateStellarID(input);
+            const div = document.createElement('div');
+            div.className = 'example-item';
+            div.innerHTML = `<strong>${input}</strong> → <span style="color: #FFD700;">${id}</span>`;
+            examplesDiv.appendChild(div);
+        });
+        
+        window.generateID = function() {
+            const input = document.getElementById('inputText').value;
+            const prefix = document.getElementById('prefix').value;
+            
+            if (!input) {
+                alert('Please enter some text!');
+                return;
+            }
+            
+            const options = prefix ? { prefix } : {};
+            const result = generateStellarID(input, options);
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = result;
+            resultDiv.style.display = 'block';
+        };
+        
+        window.generateRandom = function() {
+            const randomWords = ['hello', 'world', 'test', 'demo', 'stellar', 'cosmic', 'galaxy', 'universe'];
+            const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
+            document.getElementById('inputText').value = randomWord;
+            generateID();
+        };
+    </script>
+</body>
+</html> 

@@ -1,0 +1,31 @@
+{
+  "name": "stellar-id",
+  "version": "1.0.0",
+  "description": "Generate unique, deterministic star-themed IDs",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "id",
+    "generator",
+    "unique",
+    "stars",
+    "astronomy",
+    "identifier"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.4.2",
+    "tsup": "^8.0.2",
+    "@types/node": "^20.11.25"
+  }
+} 
