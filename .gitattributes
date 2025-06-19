@@ -1,0 +1,13 @@
+# Mark index.html as documentation so it doesn't count in language statistics
+index.html linguist-documentation=true
+
+# Explicitly mark TypeScript files
+*.ts linguist-language=TypeScript
+*.tsx linguist-language=TypeScript
+
+# Explicitly mark JavaScript files
+*.js linguist-language=JavaScript
+*.jsx linguist-language=JavaScript
+
+# Ensure dist folder is not counted
+dist/* linguist-generated=true 
