@@ -14,15 +14,27 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
+    "typescript",
     "id",
     "generator",
     "unique",
     "stars",
     "astronomy",
-    "identifier"
+    "identifier",
+    "hash",
+    "deterministic",
+    "library"
   ],
-  "author": "",
+  "author": "Yusif Jabrayilov",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mahirliy55/stellar-id.git"
+  },
+  "homepage": "https://github.com/mahirliy55/stellar-id#readme",
+  "bugs": {
+    "url": "https://github.com/mahirliy55/stellar-id/issues"
+  },
   "devDependencies": {
     "typescript": "^5.4.2",
     "tsup": "^8.0.2",
