@@ -9,8 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts && npm run build:css",
-    "build:css": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
