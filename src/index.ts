@@ -24,6 +24,7 @@ interface StellarIDOptions {
   useSpecialChars?: boolean; // Yeni özellik: Özel karakterler kullan
   case?: 'upper' | 'lower' | 'mixed'; // Yeni özellik: Büyük/küçük harf kontrolü
   hashAlgorithm?: 'simple' | 'djb2' | 'fnv1a'; // Yeni özellik: Hash algoritması seçimi
+  customStarNames?: string[]; // Yeni özellik: Özel yıldız isimleri
 }
 
 /**
@@ -82,7 +83,8 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
     length, 
     useSpecialChars = false, 
     case: caseOption = 'upper',
-    hashAlgorithm = 'simple'
+    hashAlgorithm = 'simple',
+    customStarNames
   } = options;
   
   // Hash oluştur
@@ -105,7 +107,8 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
   const hashString = hashNumber.toString().padStart(4, '0');
   
   // Yıldız isimleri
-  const starNames = ['SIRIUS', 'VEGA', 'ALTAIR', 'RIGEL', 'ANTARES', 'ALDEBARAN', 'BETELGEUSE', 'ARCTURUS', 'POLLUX', 'DENEB'];
+  const defaultStarNames = ['SIRIUS', 'VEGA', 'ALTAIR', 'RIGEL', 'ANTARES', 'ALDEBARAN', 'BETELGEUSE', 'ARCTURUS', 'POLLUX', 'DENEB'];
+  const starNames = customStarNames && customStarNames.length > 0 ? customStarNames : defaultStarNames;
   const starIndex = hashNumber % starNames.length;
   const starName = starNames[starIndex];
   
