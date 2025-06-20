@@ -25,6 +25,7 @@ interface StellarIDOptions {
   case?: 'upper' | 'lower' | 'mixed'; // Yeni özellik: Büyük/küçük harf kontrolü
   hashAlgorithm?: 'simple' | 'djb2' | 'fnv1a'; // Yeni özellik: Hash algoritması seçimi
   customStarNames?: string[]; // Yeni özellik: Özel yıldız isimleri
+  format?: string; // Yeni özellik: ID formatı özelleştirme
 }
 
 /**
@@ -84,7 +85,8 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
     useSpecialChars = false, 
     case: caseOption = 'upper',
     hashAlgorithm = 'simple',
-    customStarNames
+    customStarNames,
+    format
   } = options;
   
   // Hash oluştur
@@ -113,7 +115,19 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
   const starName = starNames[starIndex];
   
   // ID oluştur
-  let id = `${prefix}-${hashString}-${starName}`;
+  let id: string;
+  
+  if (format) {
+    // Özel format kullan
+    id = format
+      .replace('{prefix}', prefix)
+      .replace('{hash}', hashString)
+      .replace('{star}', starName)
+      .replace('{input}', input.substring(0, 10)); // Input'un ilk 10 karakteri
+  } else {
+    // Varsayılan format
+    id = `${prefix}-${hashString}-${starName}`;
+  }
   
   // Eğer uzunluk belirtilmişse, ID'yi kısalt veya uzat
   if (length && length > 0) {
