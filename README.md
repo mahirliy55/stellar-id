@@ -252,3 +252,9 @@ If you have any questions or need help, please open an issue on GitHub.
 ---
 
 **Made with ⭐ by Yusif Jabrayilov**
+
+---
+
+## 🌟 Star This Project
+
+If you found this project helpful, please consider giving it a star ⭐! It helps the project to be discovered by more people.
