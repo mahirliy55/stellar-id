@@ -22,6 +22,7 @@ interface StellarIDOptions {
   prefix?: string;
   length?: number; // Yeni özellik: ID uzunluğu kontrolü
   useSpecialChars?: boolean; // Yeni özellik: Özel karakterler kullan
+  case?: 'upper' | 'lower' | 'mixed'; // Yeni özellik: Büyük/küçük harf kontrolü
 }
 
 /**
@@ -47,7 +48,7 @@ function hashString(str: string): number {
  * generateStellarID('world', { prefix: 'COSMIC' }) // Returns: "COSMIC-5678-SIRIUS"
  */
 export function generateStellarID(input: string, options: StellarIDOptions = {}): string {
-  const { prefix = 'STAR', length, useSpecialChars = false } = options;
+  const { prefix = 'STAR', length, useSpecialChars = false, case: caseOption = 'upper' } = options;
   
   // Hash oluştur
   let hash = 0;
@@ -83,6 +84,26 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
         id += extraChars[extraIndex];
       }
     }
+  }
+  
+  // Case sensitivity uygula
+  switch (caseOption) {
+    case 'lower':
+      id = id.toLowerCase();
+      break;
+    case 'mixed':
+      // Karışık case için bazı karakterleri küçük harf yap
+      id = id.split('').map((char, index) => {
+        if (index % 2 === 0 && /[A-Z]/.test(char)) {
+          return char.toLowerCase();
+        }
+        return char;
+      }).join('');
+      break;
+    case 'upper':
+    default:
+      // Zaten büyük harf, değişiklik yok
+      break;
   }
   
   return id;
