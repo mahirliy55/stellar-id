@@ -206,4 +206,36 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
 }
 
 // Export types for TypeScript users
-export type { StellarIDOptions }; 
+export type { StellarIDOptions };
+
+// Utility fonksiyonları
+export function validateStellarID(id: string): boolean {
+  // Basit format kontrolü: PREFIX-NUMBER-STARNAME
+  const pattern = /^[A-Z0-9_-]+-\d{4}-[A-Z]+$/;
+  return pattern.test(id);
+}
+
+export function extractStellarIDParts(id: string): { prefix: string; hash: string; starName: string } | null {
+  if (!validateStellarID(id)) {
+    return null;
+  }
+  
+  const parts = id.split('-');
+  if (parts.length >= 3) {
+    return {
+      prefix: parts[0],
+      hash: parts[1],
+      starName: parts[2]
+    };
+  }
+  
+  return null;
+}
+
+export function getAvailableStarNames(): string[] {
+  return ['SIRIUS', 'VEGA', 'ALTAIR', 'RIGEL', 'ANTARES', 'ALDEBARAN', 'BETELGEUSE', 'ARCTURUS', 'POLLUX', 'DENEB'];
+}
+
+export function getAvailableHashAlgorithms(): string[] {
+  return ['simple', 'djb2', 'fnv1a'];
+} 
