@@ -1,6 +1,17 @@
+/**
+ * 🌟 Stellar ID Generator
+ * 
+ * A TypeScript library for generating unique, deterministic star-themed identifiers.
+ * Each generated ID includes a real star name from NASA/HYG databases and a hash.
+ * 
+ * @author Yusif Jabrayilov
+ * @version 1.0.0
+ * @license MIT
+ */
+
 import { getRealStarData, getRealStarNames as getRealStarNamesFromDB, getStarInfo as getStarInfoFromDB, type StarData } from './stars-database';
 
-// List of popular star names
+// List of popular star names for fallback
 const STAR_NAMES = [
   'SIRIUS',
   'VEGA',
@@ -33,6 +44,8 @@ interface StellarIDOptions {
 
 /**
  * Simple string hash function that generates a number between 0 and 9999
+ * @param str - Input string to hash
+ * @returns Hash number between 0-9999
  */
 function hashString(str: string): number {
   let hash = 0;
@@ -45,6 +58,11 @@ function hashString(str: string): number {
 }
 
 // Performance optimizasyonu - Hash fonksiyonlarını optimize et
+/**
+ * Simple hash function for basic hashing
+ * @param input - Input string
+ * @returns Hash number
+ */
 function simpleHash(input: string): number {
   let hash = 0;
   const len = input.length;
@@ -56,6 +74,11 @@ function simpleHash(input: string): number {
   return Math.abs(hash);
 }
 
+/**
+ * DJB2 hash algorithm implementation
+ * @param input - Input string
+ * @returns Hash number
+ */
 function djb2Hash(input: string): number {
   let hash = 5381;
   const len = input.length;
@@ -65,6 +88,11 @@ function djb2Hash(input: string): number {
   return Math.abs(hash);
 }
 
+/**
+ * FNV-1a hash algorithm implementation
+ * @param input - Input string
+ * @returns Hash number
+ */
 function fnv1aHash(input: string): number {
   let hash = 0x811c9dc5;
   const len = input.length;
@@ -76,6 +104,11 @@ function fnv1aHash(input: string): number {
 }
 
 // Validation fonksiyonları
+/**
+ * Validates input string
+ * @param input - Input to validate
+ * @throws Error if input is invalid
+ */
 function validateInput(input: string): void {
   if (!input || typeof input !== 'string') {
     throw new Error('Input must be a non-empty string');
@@ -85,6 +118,11 @@ function validateInput(input: string): void {
   }
 }
 
+/**
+ * Validates options object
+ * @param options - Options to validate
+ * @throws Error if options are invalid
+ */
 function validateOptions(options: StellarIDOptions): void {
   if (options.length !== undefined && (options.length < 1 || options.length > 100)) {
     throw new Error('Length must be between 1 and 100');
@@ -110,145 +148,6 @@ function validateOptions(options: StellarIDOptions): void {
  * generateStellarID('world', { prefix: 'COSMIC' }) // Returns: "COSMIC-5678-SIRIUS"
  */
 export function generateStellarID(input: string, options: StellarIDOptions = {}): string {
-  // Validation
-  validateInput(input);
-  validateOptions(options);
-  
-  const { 
-    prefix = 'STAR', 
-    length, 
-    useSpecialChars = false, 
-    case: caseOption = 'upper',
-    hashAlgorithm = 'simple',
-    customStarNames,
-    format,
-    salt
-  } = options;
-  
-  // Salt ekle
-  const saltedInput = salt ? `${input}${salt}` : input;
-  
-  // Hash oluştur
-  let hash: number;
-  switch (hashAlgorithm) {
-    case 'djb2':
-      hash = djb2Hash(saltedInput);
-      break;
-    case 'fnv1a':
-      hash = fnv1aHash(saltedInput);
-      break;
-    case 'simple':
-    default:
-      hash = simpleHash(saltedInput);
-      break;
-  }
-  
-  // Hash'i 4 haneli sayıya dönüştür
-  const hashNumber = hash % 10000;
-  const hashString = hashNumber.toString().padStart(4, '0');
-  
-  // Yıldız isimleri
-  const defaultStarNames = ['SIRIUS', 'VEGA', 'ALTAIR', 'RIGEL', 'ANTARES', 'ALDEBARAN', 'BETELGEUSE', 'ARCTURUS', 'POLLUX', 'DENEB'];
-  const starNames = customStarNames && customStarNames.length > 0 ? customStarNames : defaultStarNames;
-  const starIndex = hashNumber % starNames.length;
-  const starName = starNames[starIndex];
-  
-  // ID oluştur
-  let id: string;
-  
-  if (format) {
-    // Özel format kullan
-    id = format
-      .replace('{prefix}', prefix)
-      .replace('{hash}', hashString)
-      .replace('{star}', starName)
-      .replace('{input}', input.substring(0, 10)); // Input'un ilk 10 karakteri
-  } else {
-    // Varsayılan format
-    id = `${prefix}-${hashString}-${starName}`;
-  }
-  
-  // Eğer uzunluk belirtilmişse, ID'yi kısalt veya uzat
-  if (length && length > 0) {
-    if (id.length > length) {
-      id = id.substring(0, length);
-    } else if (id.length < length) {
-      // ID'yi uzatmak için hash'e ek karakterler ekle
-      const extraChars = useSpecialChars 
-        ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?' 
-        : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      while (id.length < length) {
-        const extraIndex = (hashNumber + id.length) % extraChars.length;
-        id += extraChars[extraIndex];
-      }
-    }
-  }
-  
-  // Case sensitivity uygula
-  switch (caseOption) {
-    case 'lower':
-      id = id.toLowerCase();
-      break;
-    case 'mixed':
-      // Karışık case için bazı karakterleri küçük harf yap
-      id = id.split('').map((char, index) => {
-        if (index % 2 === 0 && /[A-Z]/.test(char)) {
-          return char.toLowerCase();
-        }
-        return char;
-      }).join('');
-      break;
-    case 'upper':
-    default:
-      // Zaten büyük harf, değişiklik yok
-      break;
-  }
-  
-  return id;
-}
-
-// Export types for TypeScript users
-export type { StellarIDOptions };
-
-// Utility fonksiyonları
-export function validateStellarID(id: string): boolean {
-  // Basit format kontrolü: PREFIX-NUMBER-STARNAME
-  const pattern = /^[A-Z0-9_-]+-\d{4}-[A-Z]+$/;
-  return pattern.test(id);
-}
-
-export function extractStellarIDParts(id: string): { prefix: string; hash: string; starName: string } | null {
-  if (!validateStellarID(id)) {
-    return null;
-  }
-  
-  const parts = id.split('-');
-  if (parts.length >= 3) {
-    return {
-      prefix: parts[0],
-      hash: parts[1],
-      starName: parts[2]
-    };
-  }
-  
-  return null;
-}
-
-export function getAvailableStarNames(): string[] {
-  return ['SIRIUS', 'VEGA', 'ALTAIR', 'RIGEL', 'ANTARES', 'ALDEBARAN', 'BETELGEUSE', 'ARCTURUS', 'POLLUX', 'DENEB'];
-}
-
-export function getAvailableHashAlgorithms(): string[] {
-  return ['simple', 'djb2', 'fnv1a'];
-}
-
-// Yeni: Gerçek yıldız verilerini getir
-export async function getRealStarDataAsync(): Promise<StarData[]> {
-  return getRealStarData();
-}
-
-// Yeni: Async ID generation (gerçek yıldız isimleri ile)
-export async function generateStellarIDAsync(input: string, options: StellarIDOptions = {}): Promise<string> {
   // Validation
   validateInput(input);
   validateOptions(options);
@@ -351,11 +250,187 @@ export async function generateStellarIDAsync(input: string, options: StellarIDOp
   return id;
 }
 
+// Export types for TypeScript users
+export type { StellarIDOptions };
+
+// Utility fonksiyonları
+/**
+ * Validates if a string is a valid Stellar ID format
+ * @param id - The ID to validate
+ * @returns True if valid format
+ */
+export function validateStellarID(id: string): boolean {
+  // Basit format kontrolü: PREFIX-NUMBER-STARNAME
+  const pattern = /^[A-Z0-9_-]+-\d{4}-[A-Z]+$/;
+  return pattern.test(id);
+}
+
+/**
+ * Extracts parts from a Stellar ID
+ * @param id - The ID to parse
+ * @returns Object with prefix, hash, and starName or null if invalid
+ */
+export function extractStellarIDParts(id: string): { prefix: string; hash: string; starName: string } | null {
+  if (!validateStellarID(id)) {
+    return null;
+  }
+  
+  const parts = id.split('-');
+  if (parts.length >= 3) {
+    return {
+      prefix: parts[0],
+      hash: parts[1],
+      starName: parts[2]
+    };
+  }
+  
+  return null;
+}
+
+/**
+ * Returns available star names
+ * @returns Array of star names
+ */
+export function getAvailableStarNames(): string[] {
+  return ['SIRIUS', 'VEGA', 'ALTAIR', 'RIGEL', 'ANTARES', 'ALDEBARAN', 'BETELGEUSE', 'ARCTURUS', 'POLLUX', 'DENEB'];
+}
+
+/**
+ * Returns available hash algorithms
+ * @returns Array of hash algorithm names
+ */
+export function getAvailableHashAlgorithms(): string[] {
+  return ['simple', 'djb2', 'fnv1a'];
+}
+
+// Yeni: Gerçek yıldız verilerini getir
+/**
+ * Fetches real star data from external APIs
+ * @returns Promise with star data array
+ */
+export async function getRealStarDataAsync(): Promise<StarData[]> {
+  return getRealStarData();
+}
+
+// Yeni: Async ID generation (gerçek yıldız isimleri ile)
+/**
+ * Asynchronous version of generateStellarID that uses real star data
+ * @param input - Input string
+ * @param options - Generation options
+ * @returns Promise with generated ID
+ */
+export async function generateStellarIDAsync(input: string, options: StellarIDOptions = {}): Promise<string> {
+  // Validation
+  validateInput(input);
+  validateOptions(options);
+  
+  const { 
+    prefix = 'STAR', 
+    length, 
+    useSpecialChars = false, 
+    case: caseOption = 'upper',
+    hashAlgorithm = 'simple',
+    customStarNames,
+    format,
+    salt
+  } = options;
+  
+  // Salt ekle
+  const saltedInput = salt ? `${input}${salt}` : input;
+  
+  // Hash oluştur
+  let hash: number;
+  switch (hashAlgorithm) {
+    case 'djb2':
+      hash = djb2Hash(saltedInput);
+      break;
+    case 'fnv1a':
+      hash = fnv1aHash(saltedInput);
+      break;
+    case 'simple':
+    default:
+      hash = simpleHash(saltedInput);
+      break;
+  }
+  
+  // Hash'i 4 haneli sayıya dönüştür
+  const hashNumber = hash % 10000;
+  const hashString = hashNumber.toString().padStart(4, '0');
+  
+  // Yıldız isimleri
+  const defaultStarNames = ['SIRIUS', 'VEGA', 'ALTAIR', 'RIGEL', 'ANTARES', 'ALDEBARAN', 'BETELGEUSE', 'ARCTURUS', 'POLLUX', 'DENEB'];
+  const starNames = customStarNames && customStarNames.length > 0 ? customStarNames : defaultStarNames;
+  const starIndex = hashNumber % starNames.length;
+  const starName = starNames[starIndex];
+  
+  // ID oluştur
+  let id: string;
+  
+  if (format) {
+    // Özel format kullan
+    id = format
+      .replace('{prefix}', prefix)
+      .replace('{hash}', hashString)
+      .replace('{star}', starName)
+      .replace('{input}', input.substring(0, 10)); // Input'un ilk 10 karakteri
+  } else {
+    // Varsayılan format
+    id = `${prefix}-${hashString}-${starName}`;
+  }
+  
+  // Eğer uzunluk belirtilmişse, ID'yi kısalt veya uzat
+  if (length && length > 0) {
+    if (id.length > length) {
+      id = id.substring(0, length);
+    } else if (id.length < length) {
+      // ID'yi uzatmak için hash'e ek karakterler ekle
+      const extraChars = useSpecialChars 
+        ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?' 
+        : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      while (id.length < length) {
+        const extraIndex = (hashNumber + id.length) % extraChars.length;
+        id += extraChars[extraIndex];
+      }
+    }
+  }
+  
+  // Case sensitivity uygula
+  switch (caseOption) {
+    case 'lower':
+      id = id.toLowerCase();
+      break;
+    case 'mixed':
+      // Karışık case için bazı karakterleri küçük harf yap
+      id = id.split('').map((char, index) => {
+        if (index % 2 === 0 && /[A-Z]/.test(char)) {
+          return char.toLowerCase();
+        }
+        return char;
+      }).join('');
+      break;
+    case 'upper':
+    default:
+      // Zaten büyük harf, değişiklik yok
+      break;
+  }
+  
+  return id;
+}
+
 // Yeni utility fonksiyonları
+/**
+ * Gets information about a specific star
+ * @param starName - Name of the star
+ * @returns Star data or null if not found
+ */
 export function getStarInfo(starName: string): StarData | null {
   return getStarInfoFromDB(starName);
 }
 
+/**
+ * Gets list of real star names
+ * @returns Array of real star names
+ */
 export function getRealStarNames(): string[] {
   return getRealStarNamesFromDB();
 } 

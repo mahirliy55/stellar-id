@@ -1,15 +1,32 @@
+/**
+ * 🌌 Dynamic Cosmic Background Generator
+ * 
+ * Creates an animated cosmic background with stars, shooting stars, nebulas, and planets.
+ * This class generates a realistic space environment with various celestial objects.
+ * 
+ * @author Yusif Jabrayilov
+ * @version 1.0.0
+ * @license MIT
+ */
+
 // Dynamic Cosmic Background Generator
 class CosmicBackground {
+    /**
+     * Initialize the cosmic background with configuration
+     */
     constructor() {
         this.starsContainer = document.querySelector('.stars-container');
-        this.starCount = 150;
-        this.shootingStarCount = 8;
-        this.nebulaCount = 5;
-        this.planetCount = 3;
+        this.starCount = 150; // Number of stars to generate
+        this.shootingStarCount = 8; // Number of shooting stars
+        this.nebulaCount = 5; // Number of nebula clouds (reduced to 1-2)
+        this.planetCount = 3; // Number of orbiting planets
         
         this.init();
     }
     
+    /**
+     * Initialize all cosmic elements
+     */
     init() {
         this.createStars();
         this.createShootingStars();
@@ -20,6 +37,10 @@ class CosmicBackground {
         this.startAnimation();
     }
     
+    /**
+     * Creates animated stars with various properties
+     * Each star has random size, position, animation delay, and color
+     */
     createStars() {
         for (let i = 0; i < this.starCount; i++) {
             const star = document.createElement('div');
@@ -38,18 +59,23 @@ class CosmicBackground {
                 animation-duration: ${duration}s;
             `;
             
+            // Add random colors to some stars
             if (Math.random() > 0.9) {
-                star.style.background = '#FFD700';
+                star.style.background = '#FFD700'; // Gold
             } else if (Math.random() > 0.8) {
-                star.style.background = '#87CEEB';
+                star.style.background = '#87CEEB'; // Light blue
             } else if (Math.random() > 0.7) {
-                star.style.background = '#FF69B4';
+                star.style.background = '#FF69B4'; // Pink
             }
             
             this.starsContainer.appendChild(star);
         }
     }
     
+    /**
+     * Creates shooting stars with trails
+     * Each shooting star has random position, delay, duration, and angle
+     */
     createShootingStars() {
         for (let i = 0; i < this.shootingStarCount; i++) {
             const shootingStar = document.createElement('div');
@@ -70,8 +96,14 @@ class CosmicBackground {
         }
     }
     
+    /**
+     * Creates nebula clouds (reduced to 1-2 for less purple)
+     * Nebulas are large, semi-transparent clouds that float around
+     */
     createNebulas() {
-        for (let i = 0; i < this.nebulaCount; i++) {
+        // Mor nebula sayısını azalt
+        const nebulaCount = 1 + Math.floor(Math.random() * 2); // 1 veya 2
+        for (let i = 0; i < nebulaCount; i++) {
             const nebula = document.createElement('div');
             const top = Math.random() * 100;
             const left = Math.random() * 100;
@@ -93,15 +125,19 @@ class CosmicBackground {
         }
     }
     
+    /**
+     * Creates orbiting planets with realistic colors
+     * Each planet has a unique color gradient and orbit path
+     */
     createPlanets() {
         const planetColors = [
-            'radial-gradient(circle at 30% 30%, #ff6b6b, #ee5a24)',
-            'radial-gradient(circle at 30% 30%, #74b9ff, #0984e3)',
-            'radial-gradient(circle at 30% 30%, #a29bfe, #6c5ce7)',
-            'radial-gradient(circle at 30% 30%, #fd79a8, #e84393)',
-            'radial-gradient(circle at 30% 30%, #fdcb6e, #e17055)',
-            'radial-gradient(circle at 30% 30%, #00b894, #00a085)',
-            'radial-gradient(circle at 30% 30%, #e84393, #fd79a8)'
+            'radial-gradient(circle at 30% 30%, #ff6b6b, #ee5a24)', // Red
+            'radial-gradient(circle at 30% 30%, #74b9ff, #0984e3)', // Blue
+            'radial-gradient(circle at 30% 30%, #a29bfe, #6c5ce7)', // Purple
+            'radial-gradient(circle at 30% 30%, #fd79a8, #e84393)', // Pink
+            'radial-gradient(circle at 30% 30%, #fdcb6e, #e17055)', // Orange
+            'radial-gradient(circle at 30% 30%, #00b894, #00a085)', // Green
+            'radial-gradient(circle at 30% 30%, #e84393, #fd79a8)'  // Magenta
         ];
         
         for (let i = 0; i < this.planetCount; i++) {
@@ -123,6 +159,7 @@ class CosmicBackground {
                 animation: orbit ${orbitSpeed}s linear infinite;
             `;
             
+            // Create orbit path (visible trail)
             const orbitPath = document.createElement('div');
             orbitPath.style.cssText = `
                 position: absolute;
@@ -140,6 +177,10 @@ class CosmicBackground {
         }
     }
     
+    /**
+     * Creates pulsar stars (rapidly flashing stars)
+     * Pulsars are bright stars that flash quickly
+     */
     createPulsars() {
         for (let i = 0; i < 5; i++) {
             const pulsar = document.createElement('div');
@@ -159,6 +200,10 @@ class CosmicBackground {
         }
     }
     
+    /**
+     * Creates constellation lines connecting stars
+     * These are thin lines that connect nearby stars to form patterns
+     */
     createConstellations() {
         const constellations = [
             { name: 'Ursa Major', points: [[20, 30], [25, 35], [30, 40], [35, 45]] },
@@ -192,7 +237,12 @@ class CosmicBackground {
         });
     }
     
+    /**
+     * Starts all animation effects
+     * Includes parallax, random twinkling, and dynamic shooting stars
+     */
     startAnimation() {
+        // Parallax effect on mouse movement
         document.addEventListener('mousemove', (e) => {
             const stars = document.querySelectorAll('.star');
             const mouseX = e.clientX / window.innerWidth;
@@ -207,6 +257,7 @@ class CosmicBackground {
             });
         });
         
+        // Random star twinkling effect
         setInterval(() => {
             const stars = document.querySelectorAll('.star:not(.pulsar)');
             const randomStar = stars[Math.floor(Math.random() * stars.length)];
@@ -219,12 +270,14 @@ class CosmicBackground {
             }
         }, 1500);
         
+        // Dynamic shooting star creation
         setInterval(() => {
-            if (Math.random() > 0.7) {
+            if (Math.random() > 0.7) { // 30% chance
                 this.createRandomShootingStar();
             }
         }, 3000);
         
+        // Planet brightness variation
         setInterval(() => {
             const planets = document.querySelectorAll('.planet');
             planets.forEach(planet => {
@@ -234,6 +287,10 @@ class CosmicBackground {
         }, 2000);
     }
     
+    /**
+     * Creates a random shooting star dynamically
+     * Used for continuous shooting star effects
+     */
     createRandomShootingStar() {
         const shootingStar = document.createElement('div');
         const top = Math.random() * 100;
@@ -247,6 +304,7 @@ class CosmicBackground {
         
         this.starsContainer.appendChild(shootingStar);
         
+        // Remove element after animation completes
         setTimeout(() => {
             if (shootingStar.parentNode) {
                 shootingStar.parentNode.removeChild(shootingStar);

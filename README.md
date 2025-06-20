@@ -1,77 +1,125 @@
-# stellar-id
+# 🌟 Stellar ID Generator
 
-> **This project doesn't just show you the stars—it empowers your own projects to shine!**
-> 
-> Stellar-ID is not only a beautiful demo, but a fully reusable, plug-and-play TypeScript library. You can easily integrate its unique, astronomy-inspired ID generation functions into any of your own applications, products, or creative ideas. Let your next project reach for the stars—literally!
+A TypeScript library for generating unique, deterministic star-themed identifiers. Each generated ID includes a real star name from NASA/HYG databases and a hash.
 
-A lightweight, zero-dependency **TypeScript library** for generating unique, deterministic star-themed IDs **using real star data from NASA/HYG astronomical databases**.
+## ✨ Features
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mahirliy55/stellar-id)
+- **Deterministic ID Generation**: Same input always produces the same output
+- **Real Star Names**: Uses actual star data from NASA Exoplanet Archive and HYG Database
+- **Customizable**: Prefix, length, format, and more options
+- **Multiple Hash Algorithms**: Support for different hashing methods
+- **Salt Support**: Additional security with custom salts
+- **Special Characters**: Optional special character inclusion
+- **Case Sensitivity**: Upper, lower, or mixed case options
+- **Beautiful UI**: Animated cosmic background with stars, nebulas, and planets
+- **Tailwind CSS**: Modern, responsive design
+- **TypeScript Support**: Full type definitions included
 
-## 🌟 Features
-
-- 🎯 **Deterministic** - Same input always generates the same ID
-- 🪶 **Lightweight** - Zero dependencies
-- 📝 **TypeScript** - Full type support with `.d.ts` files
-- ⚡ **Simple** - Single function with minimal configuration
-- 🌟 **Star-themed** - Uses real star names (SIRIUS, VEGA, ALTAIR, etc.)
-- 🛰️ **Real Astronomical Data** - Star names and info are sourced from NASA Exoplanet Archive and HYG Database
-- 📦 **NPM Ready** - Ready to publish and install
-- 🎨 **Modern UI** - Beautiful web interface with Tailwind CSS
-- 📱 **Responsive** - Mobile-friendly design with glass morphism effects
-
-> **Note:** The star names and their properties (distance, magnitude, spectral type, constellation) are sourced from open astronomical databases such as [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/) and [HYG Database](https://astronexus.com/hyg).
-
-## 🚀 Quick Start
-
-### Installation
+## 📦 Installation
 
 ```bash
 npm install stellar-id
-# or
-yarn add stellar-id
-# or
-pnpm add stellar-id
 ```
 
-### Usage
+## 🚀 Quick Start
 
 ```typescript
 import { generateStellarID } from 'stellar-id';
 
 // Basic usage
-const id1 = generateStellarID('hello');
-console.log(id1); // e.g., "STAR-1234-VEGA"
+const id = generateStellarID('my-project');
+console.log(id); // "STAR-9560-SIRIUS"
 
-// Custom prefix
-const id2 = generateStellarID('world', { prefix: 'COSMIC' });
-console.log(id2); // e.g., "COSMIC-5678-SIRIUS"
+// With custom options
+const customId = generateStellarID('user-123', {
+  prefix: 'COSMIC',
+  length: 6,
+  useSpecialChars: true
+});
+console.log(customId); // "COSMIC-9560EF-SIRIUS"
 ```
 
-## 📖 API Reference
+## 📚 Documentation
+
+### Basic Usage
 
 ```typescript
-function generateStellarID(
-  input: string,
-  options?: {
-    prefix?: string; // Default: "STAR"
-  }
-): string;
+import { generateStellarID } from 'stellar-id';
+
+// Simple ID generation
+const id = generateStellarID('hello-world');
+// Returns: "STAR-1234-VEGA"
 ```
 
-### ID Format
-The generated ID follows the format: `${prefix}-${HASH}-${STAR_NAME}`
+### Advanced Options
 
-- **`prefix`**: A customizable prefix (defaults to "STAR")
-- **`HASH`**: A 4-digit number (0000-9999) derived from the input
-- **`STAR_NAME`**: One of 10 popular star names (SIRIUS, VEGA, ALTAIR, RIGEL, ANTARES, ALDEBARAN, BETELGEUSE, ARCTURUS, POLLUX, DENEB)
+```typescript
+const id = generateStellarID('my-input', {
+  prefix: 'COSMIC',           // Custom prefix
+  length: 8,                  // Hash length
+  useSpecialChars: true,      // Include special characters
+  case: 'mixed',              // 'upper', 'lower', or 'mixed'
+  hashAlgorithm: 'djb2',      // 'simple', 'djb2', or 'fnv1a'
+  format: '{star}_{hash}',    // Custom format
+  salt: 'mySecretSalt'        // Additional security
+});
+```
 
-## 🛠️ Development
+### Real Star Data
 
-### Clone and Setup
+```typescript
+import { generateStellarIDAsync, getRealStarDataAsync } from 'stellar-id';
+
+// Async version with real star data
+const id = await generateStellarIDAsync('my-project');
+
+// Get real star information
+const stars = await getRealStarDataAsync();
+console.log(`Found ${stars.length} real stars!`);
+```
+
+### Utility Functions
+
+```typescript
+import { 
+  validateStellarID, 
+  extractStellarIDParts,
+  getAvailableStarNames,
+  getStarInfo 
+} from 'stellar-id';
+
+// Validate ID format
+const isValid = validateStellarID('STAR-1234-SIRIUS'); // true
+
+// Extract ID components
+const parts = extractStellarIDParts('STAR-1234-SIRIUS');
+// Returns: { prefix: 'STAR', hash: '1234', starName: 'SIRIUS' }
+
+// Get available stars
+const stars = getAvailableStarNames();
+
+// Get star information
+const siriusInfo = getStarInfo('SIRIUS');
+```
+
+## 🎨 UI Features
+
+The library includes a beautiful web interface with:
+
+- **Animated Cosmic Background**: Stars, shooting stars, nebulas, and planets
+- **Real-time ID Generation**: Instant results as you type
+- **Responsive Design**: Works on all devices
+- **Modern UI**: Built with Tailwind CSS
+- **Interactive Elements**: Hover effects and animations
+
+## 🔧 Development
+
+### Prerequisites
+
+- Node.js 16+
+- npm or yarn
+
+### Setup
 
 ```bash
 git clone https://github.com/mahirliy55/stellar-id.git
@@ -85,7 +133,7 @@ npm install
 npm run build
 ```
 
-### Development Mode
+### Development Server
 
 ```bash
 npm run dev
@@ -94,83 +142,54 @@ npm run dev
 ### Test
 
 ```bash
-# JavaScript test
-node test.js
-
-# TypeScript test
-npx tsx test.ts
+node demo.js
 ```
 
-## 🌐 Web Demo
+## 📖 Code Documentation
 
-Run the web interface locally:
+**Kod kısmında her kısım için yorumlar var!** 
 
-```bash
-# Start development server
-npm run dev
+The codebase is thoroughly documented with:
 
-# In another terminal, start HTTP server
-python3 -m http.server 3000
+- **Function Documentation**: Every function has detailed JSDoc comments
+- **Parameter Descriptions**: All parameters are explained with types and examples
+- **Usage Examples**: Code examples for each feature
+- **Inline Comments**: Important code sections are explained
+- **Type Definitions**: Full TypeScript support with detailed interfaces
 
-# Open http://localhost:3000 in your browser
-```
-
-### 🎨 Web Interface Features
-
-The web interface includes:
-- **Modern Design**: Built with Tailwind CSS for a beautiful, responsive UI
-- **Glass Morphism**: Elegant glass-like effects with backdrop blur
-- **Interactive Elements**: Hover animations and smooth transitions
-- **Real-time Generation**: Instant ID generation with live preview
-- **Example Showcase**: Pre-generated examples to demonstrate the library
-- **Mobile Responsive**: Works perfectly on all device sizes
-
-## 📁 Project Structure
+### File Structure
 
 ```
-stellar-id/
-├── src/
-│   ├── index.ts          # Main TypeScript library
-│   └── styles.css        # Tailwind CSS styles
-├── dist/                 # Built files (auto-generated)
-│   ├── index.js          # CommonJS build
-│   ├── index.mjs         # ES Module build
-│   └── index.d.ts        # TypeScript declarations
-├── demo.js               # JavaScript demo
-├── test.js               # JavaScript tests
-├── test.ts               # TypeScript tests
-├── index.html            # Web interface with Tailwind CSS
-├── tailwind.config.js    # Tailwind CSS configuration
-├── postcss.config.js     # PostCSS configuration
-├── package.json          # NPM configuration
-├── tsconfig.json         # TypeScript configuration
-└── README.md             # This file
+src/
+├── index.ts              # Main library with detailed comments
+├── cosmic-background.js  # Animated background with explanations
+├── stars-database.ts     # Star data management
+└── styles.css           # Styling with comments
+
+demo.js                   # Demo with usage examples
+index.html               # Web interface
 ```
 
-## 🎨 UI Technologies
+## 🌟 Real Star Data
 
-- **Tailwind CSS**: Utility-first CSS framework for rapid UI development
-- **Glass Morphism**: Modern design trend with transparency and blur effects
-- **Responsive Design**: Mobile-first approach with flexible layouts
-- **CSS Animations**: Smooth transitions and hover effects
-- **Gradient Backgrounds**: Beautiful cosmic-themed color schemes
+The library uses real astronomical data from:
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- **NASA Exoplanet Archive**: Real star names and data
+- **HYG Database**: Comprehensive star catalog
+- **Fallback System**: Local star names when APIs are unavailable
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Author
+## 🤝 Contributing
 
-**Yusif Jabrayilov** - [GitHub](https://github.com/mahirliy55)
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📞 Support
+
+If you have any questions or need help, please open an issue on GitHub.
 
 ---
 
-⭐ If you find this project helpful, please give it a star on GitHub! 
+**Made with ⭐ by Yusif Jabrayilov** 
