@@ -23,6 +23,7 @@ interface StellarIDOptions {
   length?: number; // Yeni özellik: ID uzunluğu kontrolü
   useSpecialChars?: boolean; // Yeni özellik: Özel karakterler kullan
   case?: 'upper' | 'lower' | 'mixed'; // Yeni özellik: Büyük/küçük harf kontrolü
+  hashAlgorithm?: 'simple' | 'djb2' | 'fnv1a'; // Yeni özellik: Hash algoritması seçimi
 }
 
 /**
@@ -38,6 +39,34 @@ function hashString(str: string): number {
   return Math.abs(hash) % 10000;
 }
 
+// Hash fonksiyonları
+function simpleHash(input: string): number {
+  let hash = 0;
+  for (let i = 0; i < input.length; i++) {
+    const char = input.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash);
+}
+
+function djb2Hash(input: string): number {
+  let hash = 5381;
+  for (let i = 0; i < input.length; i++) {
+    hash = ((hash << 5) + hash) + input.charCodeAt(i);
+  }
+  return Math.abs(hash);
+}
+
+function fnv1aHash(input: string): number {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < input.length; i++) {
+    hash ^= input.charCodeAt(i);
+    hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+  }
+  return Math.abs(hash);
+}
+
 /**
  * Generates a unique, deterministic star-themed ID based on the input string.
  * @param input - The input string to generate an ID from
@@ -48,18 +77,31 @@ function hashString(str: string): number {
  * generateStellarID('world', { prefix: 'COSMIC' }) // Returns: "COSMIC-5678-SIRIUS"
  */
 export function generateStellarID(input: string, options: StellarIDOptions = {}): string {
-  const { prefix = 'STAR', length, useSpecialChars = false, case: caseOption = 'upper' } = options;
+  const { 
+    prefix = 'STAR', 
+    length, 
+    useSpecialChars = false, 
+    case: caseOption = 'upper',
+    hashAlgorithm = 'simple'
+  } = options;
   
   // Hash oluştur
-  let hash = 0;
-  for (let i = 0; i < input.length; i++) {
-    const char = input.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // 32-bit integer'a dönüştür
+  let hash: number;
+  switch (hashAlgorithm) {
+    case 'djb2':
+      hash = djb2Hash(input);
+      break;
+    case 'fnv1a':
+      hash = fnv1aHash(input);
+      break;
+    case 'simple':
+    default:
+      hash = simpleHash(input);
+      break;
   }
   
   // Hash'i 4 haneli sayıya dönüştür
-  const hashNumber = Math.abs(hash) % 10000;
+  const hashNumber = hash % 10000;
   const hashString = hashNumber.toString().padStart(4, '0');
   
   // Yıldız isimleri
