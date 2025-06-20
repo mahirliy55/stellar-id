@@ -1,4 +1,4 @@
-# 🌟 Stellar ID Generator
+# 🌟 Stellar ID Generator ⭐
 
 A TypeScript library for generating unique, deterministic star-themed identifiers. Each generated ID includes a real star name from NASA/HYG databases and a hash.
 
