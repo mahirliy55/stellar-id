@@ -210,23 +210,20 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
     id = `${prefix}-${hashString}-${starName}`;
   }
   
-  // If length is specified, shorten or extend the ID
-  if (length && length > 0) {
-    if (id.length > length) {
+  // If length is specified, shorten or lengthen the ID
+  if (length !== undefined) {
+    const currentLength = id.length;
+    if (length < currentLength) {
       id = id.substring(0, length);
-    } else if (id.length < length) {
-      // Add extra characters to hash to extend ID
-      const extraChars = useSpecialChars 
-        ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?' 
-        : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      while (id.length < length) {
-        const extraIndex = (hashNumber + id.length) % extraChars.length;
-        id += extraChars[extraIndex];
-      }
+    } else if (length > currentLength) {
+      // Add extra characters to the hash to lengthen the ID
+      const extraChars = (hash).toString(36).substring(1);
+      id += extraChars;
+      id = id.substring(0, length);
     }
   }
   
-  // Apply case sensitivity
+  // Case sensitivity
   switch (caseOption) {
     case 'lower':
       id = id.toLowerCase();
@@ -234,16 +231,31 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
     case 'mixed':
       // Make some characters lowercase for mixed case
       id = id.split('').map((char, index) => {
-        if (index % 2 === 0 && /[A-Z]/.test(char)) {
-          return char.toLowerCase();
-        }
-        return char;
+        return index % 2 === 0 ? char.toLowerCase() : char.toUpperCase();
       }).join('');
       break;
     case 'upper':
     default:
-      // Already uppercase, no change needed
+      // Already uppercase, no change
       break;
+  }
+  
+  // Special characters
+  if (useSpecialChars) {
+    // We need a defined length to add special characters meaningfully
+    if (length !== undefined) {
+      const specialChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+      // Replace some characters with special ones based on hash
+      for (let i = 0; i < id.length; i++) {
+        if (id.length >= length) break;
+        if ((hash + i) % 5 === 0) { // Add special characters sporadically
+          const specialCharIndex = (hash + i) % specialChars.length;
+          id = id.substring(0, i) + specialChars[specialCharIndex] + id.substring(i + 1);
+        }
+      }
+      // Ensure the final ID has the desired length
+      id = id.substring(0, length);
+    }
   }
   
   return id;
@@ -411,6 +423,24 @@ export async function generateStellarIDAsync(input: string, options: StellarIDOp
     default:
       // Zaten büyük harf, değişiklik yok
       break;
+  }
+  
+  // Special characters
+  if (useSpecialChars) {
+    // We need a defined length to add special characters meaningfully
+    if (length !== undefined) {
+      const specialChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+      // Replace some characters with special ones based on hash
+      for (let i = 0; i < id.length; i++) {
+        if (id.length >= length) break;
+        if ((hash + i) % 5 === 0) { // Add special characters sporadically
+          const specialCharIndex = (hash + i) % specialChars.length;
+          id = id.substring(0, i) + specialChars[specialCharIndex] + id.substring(i + 1);
+        }
+      }
+      // Ensure the final ID has the desired length
+      id = id.substring(0, length);
+    }
   }
   
   return id;
