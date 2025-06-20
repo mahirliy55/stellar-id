@@ -54,4 +54,14 @@ jspm_packages/
 *.tgz
 
 # Yarn Integrity file
-.yarn-integrity 
+.yarn-integrity
+
+# Personal contribution tools (hidden from users)
+contribution-helper.js
+CONTRIBUTION_TIPS.md
+
+# Contribution tools (hidden from users)
+scripts/daily-contribution.js
+.github/workflows/daily-contribution.yml
+CONTRIBUTION_GUIDE.md
+CONTRIBUTING.md 
