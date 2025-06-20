@@ -568,6 +568,62 @@
                         <div id="examples" class="space-y-3"></div>
                     </div>
                 </div>
+                
+                <!-- URL Shortener Section -->
+                <div class="mt-8">
+                    <div class="enhanced-glass rounded-xl p-6">
+                        <h3 class="text-2xl font-bold mb-4 text-center text-glow">🔗 URL Shortener</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="urlInput" class="block text-lg font-semibold mb-3">
+                                    Enter Stellar ID to create URL:
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="urlInput" 
+                                    placeholder="e.g., STAR-1234-VEGA"
+                                    class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all duration-300"
+                                >
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-4">
+                                <button 
+                                    onclick="generateBasicURL()"
+                                    class="cosmic-button bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                                >
+                                    🔗 Generate URL
+                                </button>
+                                <button 
+                                    onclick="generateBrandedURL()"
+                                    class="cosmic-button bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                                >
+                                    🏢 Branded URL
+                                </button>
+                                <button 
+                                    onclick="generateTemporaryURL()"
+                                    class="cosmic-button bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                                >
+                                    ⏰ Temporary URL
+                                </button>
+                            </div>
+                            
+                            <!-- URL Results -->
+                            <div id="urlResult" class="hidden">
+                                <div class="enhanced-glass rounded-xl p-6 text-center glow">
+                                    <h4 class="text-xl font-semibold mb-3">Generated URL:</h4>
+                                    <div id="urlResultText" class="text-lg font-mono text-cyan-300 break-all text-glow mb-4"></div>
+                                    <div id="urlQRCode" class="mb-4"></div>
+                                    <button 
+                                        onclick="copyURL()"
+                                        class="cosmic-button bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
+                                    >
+                                        📋 Copy URL
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -729,8 +785,7 @@ const customFormat = await generateCustomFormat('my-app', 'futuristic', aiConfig
 // AI validation
 const validation = await validateIDWithAI('STAR-1234-VEGA', 'space project', aiConfig);
 if (validation.valid) {
-  console.log('ID is appropriate!');
-}</code></pre>
+  console.log('ID is appropriate!');}</code></pre>
                     </div>
                 </div>
 
@@ -763,10 +818,13 @@ if (validation.valid) {
 
     <script type="module">
         // Import the library (you'll need to serve this with a local server)
-        import { generateStellarID } from './dist/index.mjs';
+        import { generateStellarID, generateStellarURL, generateBrandedStellarURL, generateTemporaryStellarURL } from './dist/index.mjs';
         import CosmicBackground from './src/cosmic-background.js';
         
         window.generateStellarID = generateStellarID;
+        window.generateStellarURL = generateStellarURL;
+        window.generateBrandedStellarURL = generateBrandedStellarURL;
+        window.generateTemporaryStellarURL = generateTemporaryStellarURL;
         
         // Initialize cosmic background
         new CosmicBackground();
@@ -847,6 +905,95 @@ if (validation.valid) {
                 closeAIModal();
             }
         });
+        
+        // URL Shortener Functions
+        window.generateBasicURL = async function() {
+            const stellarId = document.getElementById('urlInput').value;
+            
+            if (!stellarId) {
+                alert('Please enter a Stellar ID!');
+                return;
+            }
+            
+            try {
+                const result = await generateStellarURL(stellarId);
+                displayURLResult(result);
+            } catch (error) {
+                alert('Error generating URL: ' + error.message);
+            }
+        };
+        
+        window.generateBrandedURL = async function() {
+            const stellarId = document.getElementById('urlInput').value;
+            
+            if (!stellarId) {
+                alert('Please enter a Stellar ID!');
+                return;
+            }
+            
+            try {
+                const result = await generateBrandedStellarURL(stellarId, {
+                    name: 'MyCompany',
+                    domain: 'mycompany.com',
+                    logo: 'logo.svg'
+                });
+                displayURLResult(result);
+            } catch (error) {
+                alert('Error generating branded URL: ' + error.message);
+            }
+        };
+        
+        window.generateTemporaryURL = async function() {
+            const stellarId = document.getElementById('urlInput').value;
+            
+            if (!stellarId) {
+                alert('Please enter a Stellar ID!');
+                return;
+            }
+            
+            try {
+                const result = await generateTemporaryStellarURL(stellarId, 7); // 7 days
+                displayURLResult(result);
+            } catch (error) {
+                alert('Error generating temporary URL: ' + error.message);
+            }
+        };
+        
+        function displayURLResult(result) {
+            const resultDiv = document.getElementById('urlResult');
+            const resultText = document.getElementById('urlResultText');
+            const qrCodeDiv = document.getElementById('urlQRCode');
+            
+            resultText.textContent = result.shortUrl;
+            
+            // Display QR code if available
+            if (result.qrCode) {
+                qrCodeDiv.innerHTML = `<img src="${result.qrCode}" alt="QR Code" class="mx-auto" style="max-width: 200px;">`;
+            } else {
+                qrCodeDiv.innerHTML = '<p class="text-white/70">QR code generation not available</p>';
+            }
+            
+            resultDiv.classList.remove('hidden');
+            
+            // Scroll to result
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        window.copyURL = function() {
+            const urlText = document.getElementById('urlResultText').textContent;
+            navigator.clipboard.writeText(urlText).then(() => {
+                alert('URL copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = urlText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('URL copied to clipboard!');
+            });
+        };
     </script>
 </body>
 </html> 

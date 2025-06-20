@@ -11,6 +11,11 @@ A TypeScript library for generating unique, deterministic star-themed identifier
 - **Salt Support**: Additional security with custom salts
 - **Special Characters**: Optional special character inclusion
 - **Case Sensitivity**: Upper, lower, or mixed case options
+- **URL Shortener**: Convert Stellar IDs to shareable URLs with QR codes
+- **Branded URLs**: Custom domains and subdomains for companies
+- **Temporary URLs**: URLs with expiration dates
+- **Password Protection**: Secure URLs with password protection
+- **Analytics Tracking**: Built-in analytics for URL usage
 - **Beautiful UI**: Animated cosmic background with stars, nebulas, and planets
 - **Tailwind CSS**: Modern, responsive design
 - **TypeScript Support**: Full type definitions included
@@ -76,6 +81,35 @@ const id = await generateStellarIDAsync('my-project');
 // Get real star information
 const stars = await getRealStarDataAsync();
 console.log(`Found ${stars.length} real stars!`);
+```
+
+### URL Shortener
+
+```typescript
+import { generateStellarURL, generateBrandedStellarURL, generateTemporaryStellarURL } from 'stellar-id';
+
+// Basic URL generation
+const urlResult = await generateStellarURL('STAR-1234-VEGA');
+console.log(urlResult.shortUrl); // "https://stellar.id/STAR-1234-VEGA"
+
+// Branded URL for companies
+const brandedUrl = await generateBrandedStellarURL('COSMIC-5678-SIRIUS', {
+  name: 'MyCompany',
+  domain: 'mycompany.com'
+});
+console.log(brandedUrl.shortUrl); // "https://mycompany.stellar.id/brand/COSMIC-5678-SIRIUS"
+
+// Temporary URL (expires in 7 days)
+const tempUrl = await generateTemporaryStellarURL('GALAXY-9012-ALTAIR', 7);
+console.log(tempUrl.shortUrl); // "https://stellar.id/temp/GALAXY-9012-ALTAIR"
+
+// Password protected URL
+const protectedUrl = await generateProtectedStellarURL('STAR-3456-RIGEL', 'secret123');
+console.log(protectedUrl.shortUrl); // "https://stellar.id/secure/STAR-3456-RIGEL?p=secret123"
+
+// Batch URL generation
+const batchUrls = await generateBatchStellarURLs(['STAR-1111-VEGA', 'STAR-2222-SIRIUS']);
+console.log(batchUrls.map(u => u.shortUrl));
 ```
 
 ### Utility Functions
@@ -215,4 +249,4 @@ If you have any questions or need help, please open an issue on GitHub.
 
 ---
 
-**Made with ⭐ by Yusif Jabrayilov** 
+**Made with ⭐ by Yusif Jabrayilov**

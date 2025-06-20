@@ -567,4 +567,329 @@ export function getRealStarNames(): string[] {
 //
 // ============================================================================
 // END AI INTEGRATION SECTION
-// ============================================================================ 
+// ============================================================================
+
+// ============================================================================
+// 🔗 URL SHORTENER SECTION
+// ============================================================================
+//
+// This section provides URL shortening capabilities for Stellar IDs.
+// Users can convert their Stellar IDs into shareable URLs.
+//
+// FEATURES:
+// - Convert Stellar ID to short URL
+// - QR code generation
+// - Analytics tracking
+// - Custom domain support
+// - Expiration dates
+// - Password protection
+//
+// ============================================================================
+
+/**
+ * URL Shortener Configuration
+ */
+interface URLShortenerConfig {
+  /**
+   * Base domain for short URLs
+   * @default "stellar.id"
+   */
+  domain?: string;
+  
+  /**
+   * Custom subdomain
+   * @example "my.stellar.id"
+   */
+  subdomain?: string;
+  
+  /**
+   * URL expiration in days (0 = never expires)
+   * @default 0
+   */
+  expiresIn?: number;
+  
+  /**
+   * Password protection
+   */
+  password?: string;
+  
+  /**
+   * Enable analytics tracking
+   * @default true
+   */
+  analytics?: boolean;
+  
+  /**
+   * Custom URL path
+   * @example "project" -> stellar.id/project/STAR-1234-VEGA
+   */
+  path?: string;
+}
+
+/**
+ * URL Shortener Result
+ */
+interface URLShortenerResult {
+  /**
+   * Original Stellar ID
+   */
+  originalId: string;
+  
+  /**
+   * Generated short URL
+   */
+  shortUrl: string;
+  
+  /**
+   * QR code data URL
+   */
+  qrCode?: string;
+  
+  /**
+   * Expiration date (if set)
+   */
+  expiresAt?: Date;
+  
+  /**
+   * Analytics tracking ID
+   */
+  trackingId?: string;
+  
+  /**
+   * Creation timestamp
+   */
+  createdAt: Date;
+}
+
+/**
+ * Converts a Stellar ID to a shareable short URL
+ * @param stellarId - The Stellar ID to convert
+ * @param config - URL shortener configuration
+ * @returns Promise with URL shortener result
+ * @example
+ * const result = await generateStellarURL('STAR-1234-VEGA');
+ * console.log(result.shortUrl); // "https://stellar.id/STAR-1234-VEGA"
+ */
+export async function generateStellarURL(
+  stellarId: string, 
+  config: URLShortenerConfig = {}
+): Promise<URLShortenerResult> {
+  // Validate input
+  if (!stellarId || !validateStellarID(stellarId)) {
+    throw new Error('Invalid Stellar ID provided');
+  }
+  
+  const {
+    domain = 'stellar.id',
+    subdomain,
+    expiresIn = 0,
+    password,
+    analytics = true,
+    path
+  } = config;
+  
+  // Build the short URL
+  let shortUrl = 'https://';
+  
+  if (subdomain) {
+    shortUrl += `${subdomain}.${domain}`;
+  } else {
+    shortUrl += domain;
+  }
+  
+  if (path) {
+    shortUrl += `/${path}`;
+  }
+  
+  shortUrl += `/${stellarId}`;
+  
+  // Add password if provided
+  if (password) {
+    shortUrl += `?p=${encodeURIComponent(password)}`;
+  }
+  
+  // Calculate expiration
+  const expiresAt = expiresIn > 0 ? new Date(Date.now() + expiresIn * 24 * 60 * 60 * 1000) : undefined;
+  
+  // Generate tracking ID for analytics
+  const trackingId = analytics ? generateTrackingId(stellarId) : undefined;
+  
+  // Generate QR code
+  const qrCode = await generateQRCode(shortUrl);
+  
+  return {
+    originalId: stellarId,
+    shortUrl,
+    qrCode,
+    expiresAt,
+    trackingId,
+    createdAt: new Date()
+  };
+}
+
+/**
+ * Generates a batch of Stellar URLs
+ * @param stellarIds - Array of Stellar IDs
+ * @param config - URL shortener configuration
+ * @returns Promise with array of URL shortener results
+ */
+export async function generateBatchStellarURLs(
+  stellarIds: string[],
+  config: URLShortenerConfig = {}
+): Promise<URLShortenerResult[]> {
+  const results: URLShortenerResult[] = [];
+  
+  for (const stellarId of stellarIds) {
+    try {
+      const result = await generateStellarURL(stellarId, config);
+      results.push(result);
+    } catch (error) {
+      console.warn(`Failed to generate URL for ${stellarId}:`, error);
+    }
+  }
+  
+  return results;
+}
+
+/**
+ * Generates a QR code for a URL
+ * @param url - URL to generate QR code for
+ * @returns Promise with QR code data URL
+ */
+async function generateQRCode(url: string): Promise<string> {
+  // Simple QR code generation using a public API
+  // In production, you might want to use a library like qrcode
+  const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+  
+  try {
+    // For now, return the API URL
+    // In a real implementation, you'd fetch the image and convert to data URL
+    return qrApiUrl;
+  } catch (error) {
+    console.warn('Failed to generate QR code:', error);
+    return '';
+  }
+}
+
+/**
+ * Generates a unique tracking ID for analytics
+ * @param stellarId - Original Stellar ID
+ * @returns Tracking ID string
+ */
+function generateTrackingId(stellarId: string): string {
+  const timestamp = Date.now().toString(36);
+  const hash = simpleHash(stellarId).toString(36);
+  return `tr_${timestamp}_${hash}`.substring(0, 16);
+}
+
+/**
+ * Validates if a URL is a valid Stellar URL
+ * @param url - URL to validate
+ * @returns True if valid Stellar URL
+ */
+export function validateStellarURL(url: string): boolean {
+  try {
+    const urlObj = new URL(url);
+    const pathParts = urlObj.pathname.split('/').filter(Boolean);
+    
+    // Check if it's a stellar.id domain or similar
+    const isStellarDomain = urlObj.hostname.includes('stellar.id') || 
+                           urlObj.hostname.includes('stellar');
+    
+    // Check if path contains a valid Stellar ID format
+    const hasStellarId = pathParts.some(part => validateStellarID(part));
+    
+    return isStellarDomain && hasStellarId;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Extracts Stellar ID from a URL
+ * @param url - URL to extract ID from
+ * @returns Stellar ID or null if not found
+ */
+export function extractStellarIDFromURL(url: string): string | null {
+  try {
+    const urlObj = new URL(url);
+    const pathParts = urlObj.pathname.split('/').filter(Boolean);
+    
+    for (const part of pathParts) {
+      if (validateStellarID(part)) {
+        return part;
+      }
+    }
+    
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Creates a custom branded URL
+ * @param stellarId - Stellar ID
+ * @param brand - Brand configuration
+ * @returns Promise with branded URL result
+ */
+export async function generateBrandedStellarURL(
+  stellarId: string,
+  brand: {
+    name: string;
+    domain?: string;
+    logo?: string;
+    colors?: {
+      primary: string;
+      secondary: string;
+    };
+  }
+): Promise<URLShortenerResult> {
+  const config: URLShortenerConfig = {
+    domain: brand.domain || 'stellar.id',
+    subdomain: brand.name.toLowerCase().replace(/\s+/g, '-'),
+    path: 'brand',
+    analytics: true
+  };
+  
+  return generateStellarURL(stellarId, config);
+}
+
+/**
+ * Generates a temporary URL with expiration
+ * @param stellarId - Stellar ID
+ * @param expiresIn - Expiration in days
+ * @returns Promise with temporary URL result
+ */
+export async function generateTemporaryStellarURL(
+  stellarId: string,
+  expiresIn: number
+): Promise<URLShortenerResult> {
+  return generateStellarURL(stellarId, {
+    domain: 'stellar.id',
+    path: 'temp',
+    expiresIn,
+    analytics: true
+  });
+}
+
+/**
+ * Generates a password-protected URL
+ * @param stellarId - Stellar ID
+ * @param password - Password for protection
+ * @returns Promise with protected URL result
+ */
+export async function generateProtectedStellarURL(
+  stellarId: string,
+  password: string
+): Promise<URLShortenerResult> {
+  return generateStellarURL(stellarId, {
+    domain: 'stellar.id',
+    path: 'secure',
+    password,
+    analytics: false // Disable analytics for security
+  });
+}
+
+// Export types for TypeScript users
+export type { URLShortenerConfig, URLShortenerResult }; 

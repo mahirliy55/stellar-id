@@ -9,7 +9,7 @@
  * @license MIT
  */
 
-const { generateStellarID, generateStellarIDAsync, getRealStarDataAsync, getRealStarNames, getStarInfo } = require('./dist/index.js');
+const { generateStellarID, generateStellarIDAsync, getRealStarDataAsync, getRealStarNames, getStarInfo, generateStellarURL, generateBatchStellarURLs, generateBrandedStellarURL, generateTemporaryStellarURL, generateProtectedStellarURL } = require('./dist/index.js');
 
 console.log('🚀 Welcome to stellar-id demo!\n');
 
@@ -50,6 +50,42 @@ console.log('Mixed case:', generateStellarID('test', { case: 'mixed' }));
 console.log('Custom format:', generateStellarID('test', { format: '{star}_{hash}_{prefix}' }));
 console.log('With salt:', generateStellarID('test', { salt: 'mySecretSalt' }));
 
+// Test URL Shortener functionality
+console.log('\n🔗 Testing URL Shortener...');
+async function testURLShortener() {
+  try {
+    console.log('Generating Stellar URLs...');
+    
+    // Basic URL generation
+    const basicUrl = await generateStellarURL('STAR-1234-VEGA');
+    console.log('Basic URL:', basicUrl.shortUrl);
+    
+    // Branded URL
+    const brandedUrl = await generateBrandedStellarURL('COSMIC-5678-SIRIUS', {
+      name: 'MyCompany',
+      domain: 'mycompany.com',
+      logo: 'logo.svg'
+    });
+    console.log('Branded URL:', brandedUrl.shortUrl);
+    
+    // Temporary URL (expires in 7 days)
+    const tempUrl = await generateTemporaryStellarURL('GALAXY-9012-ALTAIR', 7);
+    console.log('Temporary URL:', tempUrl.shortUrl);
+    console.log('Expires at:', tempUrl.expiresAt);
+    
+    // Password protected URL
+    const protectedUrl = await generateProtectedStellarURL('STAR-3456-RIGEL', 'secret123');
+    console.log('Protected URL:', protectedUrl.shortUrl);
+    
+    // Batch URL generation
+    const batchUrls = await generateBatchStellarURLs(['STAR-1111-VEGA', 'STAR-2222-SIRIUS', 'STAR-3333-ALTAIR']);
+    console.log('Batch URLs:', batchUrls.map(u => u.shortUrl));
+    
+  } catch (error) {
+    console.log('URL Shortener test failed:', error.message);
+  }
+}
+
 // Test real star database integration
 console.log('\n🌟 Testing Real Star Database...');
 async function testRealStarDatabase() {
@@ -86,5 +122,6 @@ async function testRealStarDatabase() {
   }
 }
 
-// Run the real star database test
+// Run the tests
+testURLShortener();
 testRealStarDatabase(); 
