@@ -7,6 +7,7 @@
  * @author Yusif Jabrayilov
  * @version 1.0.0
  * @license MIT
+ * @since 2024
  */
 
 import { getRealStarData, getRealStarNames as getRealStarNamesFromDB, getStarInfo as getStarInfoFromDB, type StarData } from './stars-database';
