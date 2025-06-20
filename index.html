@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stellar ID Generator</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,4 39,24 60,24 42,38 48,58 32,46 16,58 22,38 4,24 25,24' fill='%23FFD700' stroke='%23FBBF24' stroke-width='2'/%3E%3C/svg%3E">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,11 +13,47 @@
                     animation: {
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'float': 'float 6s ease-in-out infinite',
+                        'twinkle': 'twinkle 2s ease-in-out infinite',
+                        'orbit': 'orbit 20s linear infinite',
+                        'shooting-star': 'shooting-star 3s linear infinite',
+                        'nebula': 'nebula 15s ease-in-out infinite',
+                        'cosmic-pulse': 'cosmic-pulse 4s ease-in-out infinite',
+                        'stellar-rotation': 'stellar-rotation 30s linear infinite',
+                        'galaxy-spin': 'galaxy-spin 25s ease-in-out infinite',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0px)' },
                             '50%': { transform: 'translateY(-10px)' },
+                        },
+                        twinkle: {
+                            '0%, 100%': { opacity: '0.3', transform: 'scale(1)' },
+                            '50%': { opacity: '1', transform: 'scale(1.2)' },
+                        },
+                        orbit: {
+                            '0%': { transform: 'rotate(0deg) translateX(100px) rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg) translateX(100px) rotate(-360deg)' },
+                        },
+                        'shooting-star': {
+                            '0%': { transform: 'translateX(-100px) translateY(0px)', opacity: '1' },
+                            '100%': { transform: 'translateX(calc(100vw + 100px)) translateY(100px)', opacity: '0' },
+                        },
+                        nebula: {
+                            '0%, 100%': { opacity: '0.3', transform: 'scale(1) rotate(0deg)' },
+                            '50%': { opacity: '0.7', transform: 'scale(1.1) rotate(180deg)' },
+                        },
+                        'cosmic-pulse': {
+                            '0%, 100%': { transform: 'scale(1)', opacity: '0.8' },
+                            '50%': { transform: 'scale(1.05)', opacity: '1' },
+                        },
+                        'stellar-rotation': {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' },
+                        },
+                        'galaxy-spin': {
+                            '0%': { transform: 'rotate(0deg) scale(1)' },
+                            '50%': { transform: 'rotate(180deg) scale(1.1)' },
+                            '100%': { transform: 'rotate(360deg) scale(1)' },
                         }
                     }
                 }
@@ -25,84 +62,240 @@
     </script>
     <style>
         .stellar-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+            position: relative;
+            overflow: hidden;
         }
+        
         .glass-effect {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
+        
+        /* Animated Stars Background */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+        
+        .star.small { width: 2px; height: 2px; }
+        .star.medium { width: 3px; height: 3px; }
+        .star.large { width: 4px; height: 4px; }
+        
+        /* Shooting Stars */
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(45deg, white, transparent);
+            border-radius: 50%;
+            animation: shooting-star 3s linear infinite;
+        }
+        
+        /* Nebula Effects */
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.3) 0%, rgba(75, 0, 130, 0.1) 70%, transparent 100%);
+            animation: nebula 15s ease-in-out infinite;
+        }
+        
+        /* Planet */
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ff6b6b, #ee5a24);
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.3);
+            animation: orbit 20s linear infinite;
+        }
+        
+        /* Content Layer */
+        .content-layer {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Enhanced Glass Effect */
+        .enhanced-glass {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Glow Effects */
+        .glow {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        
+        .text-glow {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Cosmic Effects */
+        .cosmic-pulse {
+            animation: cosmic-pulse 4s ease-in-out infinite;
+        }
+        
+        .stellar-rotation {
+            animation: stellar-rotation 30s linear infinite;
+        }
+        
+        .galaxy-spin {
+            animation: galaxy-spin 25s ease-in-out infinite;
+        }
+        
+        /* Enhanced Nebula */
+        .nebula-enhanced {
+            background: radial-gradient(circle, 
+                rgba(138, 43, 226, 0.4) 0%, 
+                rgba(75, 0, 130, 0.2) 40%, 
+                rgba(147, 112, 219, 0.1) 70%, 
+                transparent 100%);
+            filter: blur(1px);
+        }
+        
+        /* Aurora Effect */
+        .aurora {
+            background: linear-gradient(45deg, 
+                rgba(0, 255, 127, 0.1), 
+                rgba(138, 43, 226, 0.1), 
+                rgba(255, 20, 147, 0.1), 
+                rgba(0, 191, 255, 0.1));
+            background-size: 400% 400%;
+            animation: aurora-shift 8s ease-in-out infinite;
+        }
+        
+        @keyframes aurora-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Particle Effects */
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particle-float 6s ease-in-out infinite;
+        }
+        
+        @keyframes particle-float {
+            0%, 100% { transform: translateY(0px) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+        }
+        
+        /* Enhanced Button Effects */
+        .cosmic-button {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cosmic-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cosmic-button:hover::before {
+            left: 100%;
+        }
     </style>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,4 39,24 60,24 42,38 48,58 32,46 16,58 22,38 4,24 25,24' fill='%23FFD700' stroke='%23FBBF24' stroke-width='2'/%3E%3C/svg%3E">
 </head>
 <body class="stellar-gradient min-h-screen text-white font-sans">
-    <div class="max-w-4xl mx-auto p-6">
-        <div class="glass-effect rounded-2xl p-8 shadow-2xl">
-            <!-- Header -->
-            <div class="text-center mb-8">
-                <h1 class="text-5xl font-bold mb-4 animate-float">
-                    🌟 Stellar ID Generator
-                </h1>
-                <p class="text-xl text-white/80">
-                    Generate unique, deterministic star-themed identifiers
-                </p>
-            </div>
-            
-            <!-- Input Form -->
-            <div class="space-y-6 mb-8">
-                <div>
-                    <label for="inputText" class="block text-lg font-semibold mb-3">
-                        Enter your text:
-                    </label>
-                    <input 
-                        type="text" 
-                        id="inputText" 
-                        placeholder="e.g., my-project, user-123, etc."
-                        class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all duration-300"
-                    >
+    <!-- Animated Background -->
+    <div class="stars-container">
+        <!-- Dynamic stars will be generated by JavaScript -->
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-layer">
+        <div class="max-w-4xl mx-auto p-6">
+            <div class="enhanced-glass rounded-2xl p-8 shadow-2xl glow">
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <h1 class="text-5xl font-bold mb-4 animate-float text-glow">
+                        🌟 Stellar ID Generator
+                    </h1>
+                    <p class="text-xl text-white/80">
+                        Generate unique, deterministic star-themed identifiers
+                    </p>
                 </div>
                 
-                <div>
-                    <label for="prefix" class="block text-lg font-semibold mb-3">
-                        Custom prefix (optional):
-                    </label>
-                    <input 
-                        type="text" 
-                        id="prefix" 
-                        placeholder="STAR (default)"
-                        class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all duration-300"
-                    >
+                <!-- Input Form -->
+                <div class="space-y-6 mb-8">
+                    <div>
+                        <label for="inputText" class="block text-lg font-semibold mb-3">
+                            Enter your text:
+                        </label>
+                        <input 
+                            type="text" 
+                            id="inputText" 
+                            placeholder="e.g., my-project, user-123, etc."
+                            class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all duration-300"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="prefix" class="block text-lg font-semibold mb-3">
+                            Custom prefix (optional):
+                        </label>
+                        <input 
+                            type="text" 
+                            id="prefix" 
+                            placeholder="STAR (default)"
+                            class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all duration-300"
+                        >
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-4">
+                        <button 
+                            onclick="generateID()"
+                            class="cosmic-button bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                        >
+                            🚀 Generate Stellar ID
+                        </button>
+                        <button 
+                            onclick="generateRandom()"
+                            class="cosmic-button bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                        >
+                            🎲 Random Example
+                        </button>
+                    </div>
                 </div>
                 
-                <div class="flex flex-wrap gap-4">
-                    <button 
-                        onclick="generateID()"
-                        class="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                    >
-                        🚀 Generate Stellar ID
-                    </button>
-                    <button 
-                        onclick="generateRandom()"
-                        class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                    >
-                        🎲 Random Example
-                    </button>
+                <!-- Result -->
+                <div id="result" class="hidden">
+                    <div class="enhanced-glass rounded-xl p-6 text-center glow">
+                        <h3 class="text-xl font-semibold mb-3">Generated ID:</h3>
+                        <div id="resultText" class="text-2xl font-mono text-yellow-300 break-all text-glow"></div>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Result -->
-            <div id="result" class="hidden">
-                <div class="glass-effect rounded-xl p-6 text-center">
-                    <h3 class="text-xl font-semibold mb-3">Generated ID:</h3>
-                    <div id="resultText" class="text-2xl font-mono text-yellow-300 break-all"></div>
-                </div>
-            </div>
-            
-            <!-- Examples -->
-            <div class="mt-8">
-                <div class="glass-effect rounded-xl p-6">
-                    <h3 class="text-2xl font-bold mb-4 text-center">✨ Example IDs</h3>
-                    <div id="examples" class="space-y-3"></div>
+                
+                <!-- Examples -->
+                <div class="mt-8">
+                    <div class="enhanced-glass rounded-xl p-6">
+                        <h3 class="text-2xl font-bold mb-4 text-center text-glow">✨ Example IDs</h3>
+                        <div id="examples" class="space-y-3"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -111,8 +304,12 @@
     <script type="module">
         // Import the library (you'll need to serve this with a local server)
         import { generateStellarID } from './dist/index.mjs';
+        import CosmicBackground from './src/cosmic-background.js';
         
         window.generateStellarID = generateStellarID;
+        
+        // Initialize cosmic background
+        new CosmicBackground();
         
         // Generate example IDs
         const exampleInputs = [
@@ -127,10 +324,10 @@
         exampleInputs.forEach(input => {
             const id = generateStellarID(input);
             const div = document.createElement('div');
-            div.className = 'glass-effect rounded-lg p-4 flex justify-between items-center';
+            div.className = 'enhanced-glass rounded-lg p-4 flex justify-between items-center';
             div.innerHTML = `
                 <span class="font-semibold">${input}</span>
-                <span class="text-yellow-300 font-mono">${id}</span>
+                <span class="text-yellow-300 font-mono text-glow">${id}</span>
             `;
             examplesDiv.appendChild(div);
         });

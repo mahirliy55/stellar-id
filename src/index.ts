@@ -1,3 +1,5 @@
+import { getRealStarData, getRealStarNames as getRealStarNamesFromDB, getStarInfo as getStarInfoFromDB, type StarData } from './stars-database';
+
 // List of popular star names
 const STAR_NAMES = [
   'SIRIUS',
@@ -238,4 +240,122 @@ export function getAvailableStarNames(): string[] {
 
 export function getAvailableHashAlgorithms(): string[] {
   return ['simple', 'djb2', 'fnv1a'];
+}
+
+// Yeni: Gerçek yıldız verilerini getir
+export async function getRealStarDataAsync(): Promise<StarData[]> {
+  return getRealStarData();
+}
+
+// Yeni: Async ID generation (gerçek yıldız isimleri ile)
+export async function generateStellarIDAsync(input: string, options: StellarIDOptions = {}): Promise<string> {
+  // Validation
+  validateInput(input);
+  validateOptions(options);
+  
+  const { 
+    prefix = 'STAR', 
+    length, 
+    useSpecialChars = false, 
+    case: caseOption = 'upper',
+    hashAlgorithm = 'simple',
+    customStarNames,
+    format,
+    salt
+  } = options;
+  
+  // Salt ekle
+  const saltedInput = salt ? `${input}${salt}` : input;
+  
+  // Hash oluştur
+  let hash: number;
+  switch (hashAlgorithm) {
+    case 'djb2':
+      hash = djb2Hash(saltedInput);
+      break;
+    case 'fnv1a':
+      hash = fnv1aHash(saltedInput);
+      break;
+    case 'simple':
+    default:
+      hash = simpleHash(saltedInput);
+      break;
+  }
+  
+  // Hash'i 4 haneli sayıya dönüştür
+  const hashNumber = hash % 10000;
+  const hashString = hashNumber.toString().padStart(4, '0');
+  
+  // Yıldız isimleri - gerçek veritabanından çek
+  let starNames: string[];
+  if (customStarNames && customStarNames.length > 0) {
+    starNames = customStarNames;
+  } else {
+    starNames = getRealStarNamesFromDB();
+  }
+  
+  const starIndex = hashNumber % starNames.length;
+  const starName = starNames[starIndex];
+  
+  // ID oluştur
+  let id: string;
+  
+  if (format) {
+    // Özel format kullan
+    id = format
+      .replace('{prefix}', prefix)
+      .replace('{hash}', hashString)
+      .replace('{star}', starName)
+      .replace('{input}', input.substring(0, 10)); // Input'un ilk 10 karakteri
+  } else {
+    // Varsayılan format
+    id = `${prefix}-${hashString}-${starName}`;
+  }
+  
+  // Eğer uzunluk belirtilmişse, ID'yi kısalt veya uzat
+  if (length && length > 0) {
+    if (id.length > length) {
+      id = id.substring(0, length);
+    } else if (id.length < length) {
+      // ID'yi uzatmak için hash'e ek karakterler ekle
+      const extraChars = useSpecialChars 
+        ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?' 
+        : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      while (id.length < length) {
+        const extraIndex = (hashNumber + id.length) % extraChars.length;
+        id += extraChars[extraIndex];
+      }
+    }
+  }
+  
+  // Case sensitivity uygula
+  switch (caseOption) {
+    case 'lower':
+      id = id.toLowerCase();
+      break;
+    case 'mixed':
+      // Karışık case için bazı karakterleri küçük harf yap
+      id = id.split('').map((char, index) => {
+        if (index % 2 === 0 && /[A-Z]/.test(char)) {
+          return char.toLowerCase();
+        }
+        return char;
+      }).join('');
+      break;
+    case 'upper':
+    default:
+      // Zaten büyük harf, değişiklik yok
+      break;
+  }
+  
+  return id;
+}
+
+// Yeni utility fonksiyonları
+export function getStarInfo(starName: string): StarData | null {
+  return getStarInfoFromDB(starName);
+}
+
+export function getRealStarNames(): string[] {
+  return getRealStarNamesFromDB();
 } 
