@@ -54,7 +54,26 @@
                             '0%': { transform: 'rotate(0deg) scale(1)' },
                             '50%': { transform: 'rotate(180deg) scale(1.1)' },
                             '100%': { transform: 'rotate(360deg) scale(1)' },
-                        }
+                        },
+                        pulsar: {
+                            '0%, 100%': { opacity: '0.2', transform: 'scale(1)' },
+                            '50%': { opacity: '1', transform: 'scale(1.5)' },
+                        },
+                        nebula: {
+                            '0%, 100%': { opacity: '0.3', transform: 'scale(1) rotate(0deg)' },
+                            '25%': { opacity: '0.5', transform: 'scale(1.1) rotate(5deg)' },
+                            '50%': { opacity: '0.4', transform: 'scale(0.9) rotate(-3deg)' },
+                            '75%': { opacity: '0.6', transform: 'scale(1.05) rotate(2deg)' },
+                        },
+                        aurora: {
+                            '0%, 100%': { transform: 'translateX(-100%) skewX(-15deg)', opacity: '0.3' },
+                            '50%': { transform: 'translate(100%) skewX(-15deg)', opacity: '0.7' },
+                        },
+                        pulse: {
+                            '0%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.5)' },
+                            '100%': { transform: 'scale(1)' },
+                        },
                     }
                 }
             }
@@ -64,7 +83,7 @@
         .stellar-gradient {
             background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
             position: relative;
-            overflow: hidden;
+            min-height: 100vh;
         }
         
         .glass-effect {
@@ -88,38 +107,89 @@
             position: absolute;
             background: white;
             border-radius: 50%;
-            animation: twinkle 2s ease-in-out infinite;
+            animation: twinkle 3s ease-in-out infinite;
+            transition: all 0.3s ease;
         }
         
-        .star.small { width: 2px; height: 2px; }
-        .star.medium { width: 3px; height: 3px; }
-        .star.large { width: 4px; height: 4px; }
+        .star.small {
+            width: 2px;
+            height: 2px;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+        }
+        
+        .star.medium {
+            width: 3px;
+            height: 3px;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+        }
+        
+        .star.large {
+            width: 4px;
+            height: 4px;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 1);
+        }
+        
+        .star.pulsar {
+            animation: pulsar-flash 0.5s ease-in-out infinite;
+        }
+        
+        .star:hover {
+            transform: scale(2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+        }
         
         /* Shooting Stars */
         .shooting-star {
             position: absolute;
             width: 2px;
             height: 2px;
-            background: linear-gradient(45deg, white, transparent);
+            background: linear-gradient(90deg, transparent, #fff, transparent);
             border-radius: 50%;
+            box-shadow: 0 0 10px #fff;
             animation: shooting-star 3s linear infinite;
+        }
+        
+        .shooting-star::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+            transform: translateX(-100px);
         }
         
         /* Nebula Effects */
         .nebula {
             position: absolute;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(138, 43, 226, 0.3) 0%, rgba(75, 0, 130, 0.1) 70%, transparent 100%);
-            animation: nebula 15s ease-in-out infinite;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.2), transparent);
+            animation: nebula-float 15s ease-in-out infinite;
+            filter: blur(1px);
+        }
+        
+        .nebula-enhanced {
+            background: radial-gradient(circle, 
+                rgba(138, 43, 226, 0.4) 0%, 
+                rgba(75, 0, 130, 0.3) 30%, 
+                rgba(147, 112, 219, 0.2) 60%, 
+                transparent 100%);
+            filter: blur(2px);
         }
         
         /* Planet */
         .planet {
             position: absolute;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #ff6b6b, #ee5a24);
-            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.3);
-            animation: orbit 20s linear infinite;
+            box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.5);
+            animation: orbit 30s linear infinite;
+            transition: all 0.5s ease;
+        }
+        
+        .planet:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
         }
         
         /* Content Layer */
@@ -158,30 +228,223 @@
             animation: galaxy-spin 25s ease-in-out infinite;
         }
         
+        /* Enhanced Star Animations */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        @keyframes pulsar-flash {
+            0%, 100% { opacity: 0.2; transform: scale(1); box-shadow: 0 0 20px #FFD700; }
+            50% { opacity: 1; transform: scale(1.5); box-shadow: 0 0 40px #FFD700, 0 0 60px #FFD700; }
+        }
+        
+        @keyframes shooting-star {
+            0% { 
+                transform: translateX(-100px) translateY(0) rotate(45deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateX(calc(100vw + 100px)) translateY(calc(100vh + 100px)) rotate(45deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes nebula-float {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1) rotate(0deg);
+                opacity: 0.3;
+            }
+            25% { 
+                transform: translate(20px, -15px) scale(1.1) rotate(5deg);
+                opacity: 0.5;
+            }
+            50% { 
+                transform: translate(-10px, 25px) scale(0.9) rotate(-3deg);
+                opacity: 0.4;
+            }
+            75% { 
+                transform: translate(15px, 10px) scale(1.05) rotate(2deg);
+                opacity: 0.6;
+            }
+        }
+        
+        @keyframes orbit {
+            0% { transform: rotate(0deg) translateX(50px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
+        }
+        
+        @keyframes constellation-glow {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.4; }
+        }
+        
+        @keyframes stellar-rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes aurora-wave {
+            0%, 100% { 
+                transform: translateX(-100%) skewX(-15deg);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translateX(100%) skewX(-15deg);
+                opacity: 0.7;
+            }
+        }
+        
+        @keyframes cosmic-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
+            }
+        }
+        
+        /* Enhanced Star Styles */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+        
+        .star.small {
+            width: 2px;
+            height: 2px;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+        }
+        
+        .star.medium {
+            width: 3px;
+            height: 3px;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+        }
+        
+        .star.large {
+            width: 4px;
+            height: 4px;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 1);
+        }
+        
+        .star.pulsar {
+            animation: pulsar-flash 0.5s ease-in-out infinite;
+        }
+        
+        .star:hover {
+            transform: scale(2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+        }
+        
+        /* Enhanced Shooting Star */
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff;
+            animation: shooting-star 3s linear infinite;
+        }
+        
+        .shooting-star::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+            transform: translateX(-100px);
+        }
+        
         /* Enhanced Nebula */
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.2), transparent);
+            animation: nebula-float 15s ease-in-out infinite;
+            filter: blur(1px);
+        }
+        
         .nebula-enhanced {
             background: radial-gradient(circle, 
                 rgba(138, 43, 226, 0.4) 0%, 
-                rgba(75, 0, 130, 0.2) 40%, 
-                rgba(147, 112, 219, 0.1) 70%, 
+                rgba(75, 0, 130, 0.3) 30%, 
+                rgba(147, 112, 219, 0.2) 60%, 
                 transparent 100%);
-            filter: blur(1px);
+            filter: blur(2px);
+        }
+        
+        /* Enhanced Planet */
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.5);
+            animation: orbit 30s linear infinite;
+            transition: all 0.5s ease;
+        }
+        
+        .planet:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
         }
         
         /* Aurora Effect */
         .aurora {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: linear-gradient(45deg, 
-                rgba(0, 255, 127, 0.1), 
-                rgba(138, 43, 226, 0.1), 
-                rgba(255, 20, 147, 0.1), 
-                rgba(0, 191, 255, 0.1));
-            background-size: 400% 400%;
-            animation: aurora-shift 8s ease-in-out infinite;
+                transparent 0%, 
+                rgba(0, 255, 127, 0.1) 25%, 
+                rgba(138, 43, 226, 0.1) 50%, 
+                rgba(255, 20, 147, 0.1) 75%, 
+                transparent 100%);
+            animation: aurora-wave 20s ease-in-out infinite;
+            pointer-events: none;
         }
         
-        @keyframes aurora-shift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        /* Cosmic Button Enhancements */
+        .cosmic-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: cosmic-pulse 2s ease-in-out infinite;
+        }
+        
+        .cosmic-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .cosmic-button:hover::before {
+            left: 100%;
+        }
+        
+        .cosmic-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
+        }
+        
+        .cosmic-button:active {
+            transform: translateY(0);
         }
         
         /* Particle Effects */
@@ -197,34 +460,16 @@
             0%, 100% { transform: translateY(0px) scale(1); opacity: 0.3; }
             50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
         }
-        
-        /* Enhanced Button Effects */
-        .cosmic-button {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .cosmic-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .cosmic-button:hover::before {
-            left: 100%;
-        }
     </style>
 </head>
 <body class="stellar-gradient min-h-screen text-white font-sans">
     <!-- Animated Background -->
     <div class="stars-container">
-        <!-- Dynamic stars will be generated by JavaScript -->
+        <!-- Stars, shooting stars, nebulas, and planets will be generated here -->
     </div>
+    
+    <!-- Aurora Effect -->
+    <div class="aurora"></div>
 
     <!-- Main Content -->
     <div class="content-layer">
