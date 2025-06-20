@@ -21,6 +21,7 @@ interface StellarIDOptions {
    */
   prefix?: string;
   length?: number; // Yeni özellik: ID uzunluğu kontrolü
+  useSpecialChars?: boolean; // Yeni özellik: Özel karakterler kullan
 }
 
 /**
@@ -46,7 +47,7 @@ function hashString(str: string): number {
  * generateStellarID('world', { prefix: 'COSMIC' }) // Returns: "COSMIC-5678-SIRIUS"
  */
 export function generateStellarID(input: string, options: StellarIDOptions = {}): string {
-  const { prefix = 'STAR', length } = options;
+  const { prefix = 'STAR', length, useSpecialChars = false } = options;
   
   // Hash oluştur
   let hash = 0;
@@ -74,7 +75,9 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
       id = id.substring(0, length);
     } else if (id.length < length) {
       // ID'yi uzatmak için hash'e ek karakterler ekle
-      const extraChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const extraChars = useSpecialChars 
+        ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?' 
+        : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       while (id.length < length) {
         const extraIndex = (hashNumber + id.length) % extraChars.length;
         id += extraChars[extraIndex];
