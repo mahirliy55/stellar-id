@@ -178,6 +178,29 @@ The library uses real astronomical data from:
 - **HYG Database**: Comprehensive star catalog
 - **Fallback System**: Local star names when APIs are unavailable
 
+## 🤖 AI Integration Ready
+
+The library is designed with AI integration in mind! Check the code for detailed step-by-step instructions on how to add AI capabilities:
+
+### AI Features Ready to Implement:
+- **AI-Enhanced ID Generation**: Use AI to create context-aware IDs
+- **Smart Star Name Suggestions**: AI-powered star name recommendations
+- **Intelligent ID Validation**: AI validation of generated IDs
+- **Custom Format Generation**: AI-generated custom ID formats
+- **Star Information Enhancement**: AI-powered star descriptions
+- **Constellation Suggestions**: AI-suggested constellation patterns
+- **ID Optimization**: AI-optimized IDs based on criteria
+- **Batch Processing**: AI-powered batch ID generation
+
+### Quick AI Integration Steps:
+1. Choose your AI provider (OpenAI, Anthropic, Google, Local)
+2. Add AI configuration interface
+3. Implement AI-enhanced functions
+4. Add AI-powered utilities
+5. Test and optimize
+
+See the detailed comments in `src/index.ts` for complete implementation guide!
+
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file for details.

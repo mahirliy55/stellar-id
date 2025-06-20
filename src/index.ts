@@ -434,4 +434,137 @@ export function getStarInfo(starName: string): StarData | null {
  */
 export function getRealStarNames(): string[] {
   return getRealStarNamesFromDB();
-} 
+}
+
+// ============================================================================
+// 🤖 AI INTEGRATION SECTION
+// ============================================================================
+// 
+// This section is designed for easy AI integration. Follow these steps to add AI capabilities:
+//
+// STEP 1: Choose your AI provider
+// - OpenAI GPT: Use OpenAI API for natural language processing
+// - Anthropic Claude: Use Claude API for advanced reasoning
+// - Google Gemini: Use Google's AI for creative tasks
+// - Local AI: Use local models like Ollama or LM Studio
+//
+// STEP 2: Add AI configuration interface
+// interface AIConfig {
+//   provider: 'openai' | 'anthropic' | 'google' | 'local';
+//   apiKey?: string;
+//   model?: string;
+//   temperature?: number;
+//   maxTokens?: number;
+// }
+//
+// STEP 3: Create AI-enhanced ID generation
+// export async function generateStellarIDWithAI(
+//   input: string, 
+//   options: StellarIDOptions = {}, 
+//   aiConfig: AIConfig
+// ): Promise<string> {
+//   // 1. Generate base ID
+//   const baseId = generateStellarID(input, options);
+//   
+//   // 2. Use AI to enhance the ID with context
+//   const enhancedId = await enhanceWithAI(baseId, input, aiConfig);
+//   
+//   return enhancedId;
+// }
+//
+// STEP 4: Add AI-powered star name suggestions
+// export async function suggestStarNames(
+//   context: string, 
+//   aiConfig: AIConfig
+// ): Promise<string[]> {
+//   // Use AI to suggest relevant star names based on context
+//   const prompt = `Suggest 5 star names relevant to: ${context}`;
+//   const response = await callAI(prompt, aiConfig);
+//   return parseStarNames(response);
+// }
+//
+// STEP 5: Add AI-powered ID validation
+// export async function validateIDWithAI(
+//   id: string, 
+//   context: string, 
+//   aiConfig: AIConfig
+// ): Promise<{ valid: boolean; suggestions: string[] }> {
+//   // Use AI to validate if ID matches context
+//   const prompt = `Validate if this ID "${id}" is appropriate for: ${context}`;
+//   const response = await callAI(prompt, aiConfig);
+//   return parseValidation(response);
+// }
+//
+// STEP 6: Add AI-powered custom formats
+// export async function generateCustomFormat(
+//   input: string, 
+//   style: string, 
+//   aiConfig: AIConfig
+// ): Promise<string> {
+//   // Use AI to generate custom ID formats
+//   const prompt = `Create a ${style} format for ID based on: ${input}`;
+//   const response = await callAI(prompt, aiConfig);
+//   return response;
+// }
+//
+// STEP 7: Add AI-powered star information
+// export async function getStarInfoWithAI(
+//   starName: string, 
+//   aiConfig: AIConfig
+// ): Promise<StarData & { aiDescription: string }> {
+//   // Enhance star data with AI-generated descriptions
+//   const baseInfo = getStarInfo(starName);
+//   const aiDescription = await generateStarDescription(starName, aiConfig);
+//   return { ...baseInfo, aiDescription };
+// }
+//
+// STEP 8: Add AI-powered constellation suggestions
+// export async function suggestConstellations(
+//   stars: string[], 
+//   aiConfig: AIConfig
+// ): Promise<string[]> {
+//   // Use AI to suggest constellation patterns
+//   const prompt = `Suggest constellations for these stars: ${stars.join(', ')}`;
+//   const response = await callAI(prompt, aiConfig);
+//   return parseConstellations(response);
+// }
+//
+// STEP 9: Add AI-powered ID optimization
+// export async function optimizeID(
+//   id: string, 
+//   criteria: string[], 
+//   aiConfig: AIConfig
+// ): Promise<string> {
+//   // Use AI to optimize ID based on criteria
+//   const prompt = `Optimize this ID "${id}" for: ${criteria.join(', ')}`;
+//   const response = await callAI(prompt, aiConfig);
+//   return response;
+// }
+//
+// STEP 10: Add AI-powered batch processing
+// export async function generateBatchWithAI(
+//   inputs: string[], 
+//   options: StellarIDOptions = {}, 
+//   aiConfig: AIConfig
+// ): Promise<string[]> {
+//   // Use AI to generate optimized batch of IDs
+//   const prompt = `Generate IDs for: ${inputs.join(', ')}`;
+//   const response = await callAI(prompt, aiConfig);
+//   return parseBatchResponse(response);
+// }
+//
+// EXAMPLE USAGE:
+// const aiConfig = {
+//   provider: 'openai',
+//   apiKey: 'your-api-key',
+//   model: 'gpt-4',
+//   temperature: 0.7
+// };
+//
+// const enhancedId = await generateStellarIDWithAI('my-project', {}, aiConfig);
+// const suggestions = await suggestStarNames('space exploration', aiConfig);
+// const optimizedId = await optimizeID('STAR-1234-VEGA', ['short', 'memorable'], aiConfig);
+//
+// ============================================================================
+// END AI INTEGRATION SECTION
+// ============================================================================ 

@@ -421,6 +421,62 @@
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
+        
+        /* AI Button Special Effects */
+        .ai-button {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .ai-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: ai-rotate 3s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .ai-button:hover::after {
+            opacity: 1;
+        }
+        
+        @keyframes ai-rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .ai-button:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 
+                0 15px 35px rgba(59, 130, 246, 0.4),
+                0 0 30px rgba(147, 51, 234, 0.3),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+        
+        .ai-button:active {
+            transform: translateY(-1px) scale(1.05);
+        }
+        
+        /* AI Button Pulse Animation */
+        .ai-button {
+            animation: ai-pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes ai-pulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
+            }
+        }
     </style>
 </head>
 <body class="stellar-gradient min-h-screen text-white font-sans">
@@ -502,6 +558,18 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- AI Assistant Button - Fixed Position Bottom Right -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button 
+            onclick="window.open('https://github.com/mahirliy55', '_blank')"
+            class="ai-button cosmic-button bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-full transition-all duration-300 transform hover:scale-110 shadow-2xl hover:shadow-3xl flex items-center space-x-2"
+            title="AI Assistant - Visit GitHub Profile"
+        >
+            <span class="text-2xl">🤖</span>
+            <span class="hidden sm:inline">AI Assistant</span>
+        </button>
     </div>
 
     <script type="module">
