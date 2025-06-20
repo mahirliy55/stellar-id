@@ -563,13 +563,190 @@
     <!-- AI Assistant Button - Fixed Position Bottom Right -->
     <div class="fixed bottom-6 right-6 z-50">
         <button 
-            onclick="window.open('https://github.com/mahirliy55', '_blank')"
+            onclick="openAIModal()"
             class="ai-button cosmic-button bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-full transition-all duration-300 transform hover:scale-110 shadow-2xl hover:shadow-3xl flex items-center space-x-2"
-            title="AI Assistant - Visit GitHub Profile"
+            title="Want to integrate AI?"
         >
             <span class="text-2xl">🤖</span>
-            <span class="hidden sm:inline">AI Assistant</span>
+            <span class="hidden sm:inline">Want to integrate AI?</span>
         </button>
+    </div>
+
+    <!-- AI Integration Modal -->
+    <div id="aiModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="enhanced-glass rounded-2xl p-8 max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-glow">🤖 AI Integration Guide</h2>
+                <button onclick="closeAIModal()" class="text-2xl hover:text-red-400 transition-colors">×</button>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="enhanced-glass rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-300">🚀 Ready-to-Use AI Features</h3>
+                    <ul class="space-y-2 text-white/90">
+                        <li>• <strong>AI-Enhanced ID Generation</strong> - Context-aware IDs</li>
+                        <li>• <strong>Smart Star Name Suggestions</strong> - AI-powered recommendations</li>
+                        <li>• <strong>Intelligent ID Validation</strong> - AI validation system</li>
+                        <li>• <strong>Custom Format Generation</strong> - AI-generated formats</li>
+                        <li>• <strong>Star Information Enhancement</strong> - AI descriptions</li>
+                        <li>• <strong>Constellation Suggestions</strong> - AI pattern recognition</li>
+                        <li>• <strong>ID Optimization</strong> - AI-based optimization</li>
+                        <li>• <strong>Batch Processing</strong> - AI-powered batch generation</li>
+                    </ul>
+                </div>
+
+                <div class="enhanced-glass rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-green-300">📋 Quick Integration Steps</h3>
+                    <ol class="space-y-3 text-white/90">
+                        <li><strong>1.</strong> Choose your AI provider (OpenAI, Anthropic, Google, Local)</li>
+                        <li><strong>2.</strong> Add AI configuration interface</li>
+                        <li><strong>3.</strong> Implement AI-enhanced functions</li>
+                        <li><strong>4.</strong> Add AI-powered utilities</li>
+                        <li><strong>5.</strong> Test and optimize</li>
+                    </ol>
+                </div>
+
+                <div class="enhanced-glass rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-purple-300">💻 Code Examples</h3>
+                    
+                    <!-- Step 1: Basic Setup -->
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold mb-2 text-blue-300">Step 1: Basic AI Setup</h4>
+                        <pre class="bg-black/50 rounded-lg p-4 text-sm text-green-300 overflow-x-auto mb-3"><code>// Install AI dependencies
+npm install openai anthropic-ai @google/generative-ai
+
+// Import AI providers
+import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';</code></pre>
+                    </div>
+
+                    <!-- Step 2: Configuration -->
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold mb-2 text-blue-300">Step 2: AI Configuration</h4>
+                        <pre class="bg-black/50 rounded-lg p-4 text-sm text-green-300 overflow-x-auto mb-3"><code>// AI Configuration Interface
+interface AIConfig {
+  provider: 'openai' | 'anthropic' | 'google' | 'local';
+  apiKey?: string;
+  model?: string;
+  temperature?: number;
+  maxTokens?: number;
+}
+
+// Example configurations
+const openAIConfig = {
+  provider: 'openai',
+  apiKey: 'your-openai-key',
+  model: 'gpt-4',
+  temperature: 0.7
+};
+
+const claudeConfig = {
+  provider: 'anthropic',
+  apiKey: 'your-claude-key',
+  model: 'claude-3-sonnet',
+  temperature: 0.8
+};</code></pre>
+                    </div>
+
+                    <!-- Step 3: AI Functions -->
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold mb-2 text-blue-300">Step 3: AI-Enhanced Functions</h4>
+                        <pre class="bg-black/50 rounded-lg p-4 text-sm text-green-300 overflow-x-auto mb-3"><code>// AI-Enhanced ID Generation
+export async function generateStellarIDWithAI(
+  input: string, 
+  options: StellarIDOptions = {}, 
+  aiConfig: AIConfig
+): Promise<string> {
+  // 1. Generate base ID
+  const baseId = generateStellarID(input, options);
+  
+  // 2. Use AI to enhance the ID
+  const enhancedId = await enhanceWithAI(baseId, input, aiConfig);
+  
+  return enhancedId;
+}
+
+// Smart Star Name Suggestions
+export async function suggestStarNames(
+  context: string, 
+  aiConfig: AIConfig
+): Promise<string[]> {
+  const prompt = `Suggest 5 star names relevant to: ${context}`;
+  const response = await callAI(prompt, aiConfig);
+  return parseStarNames(response);}</code></pre>
+                    </div>
+
+                    <!-- Step 4: Usage Examples -->
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold mb-2 text-blue-300">Step 4: Usage Examples</h4>
+                        <pre class="bg-black/50 rounded-lg p-4 text-sm text-green-300 overflow-x-auto mb-3"><code>// Basic AI Integration
+const aiConfig = {
+  provider: 'openai',
+  apiKey: 'your-api-key',
+  model: 'gpt-4',
+  temperature: 0.7
+};
+
+// Generate AI-enhanced ID
+const enhancedId = await generateStellarIDWithAI('my-project', {}, aiConfig);
+
+// Get smart star suggestions
+const suggestions = await suggestStarNames('space exploration', aiConfig);
+
+// AI-powered ID optimization
+const optimizedId = await optimizeID('STAR-1234-VEGA', ['short', 'memorable'], aiConfig);
+
+// Batch processing with AI
+const batchIds = await generateBatchWithAI(['project1', 'project2', 'project3'], {}, aiConfig);</code></pre>
+                    </div>
+
+                    <!-- Step 5: Advanced Features -->
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold mb-2 text-blue-300">Step 5: Advanced AI Features</h4>
+                        <pre class="bg-black/50 rounded-lg p-4 text-sm text-green-300 overflow-x-auto"><code>// AI-powered star information
+const starInfo = await getStarInfoWithAI('SIRIUS', aiConfig);
+console.log(starInfo.aiDescription); // AI-generated description
+
+// Constellation suggestions
+const constellations = await suggestConstellations(['SIRIUS', 'VEGA', 'ALTAIR'], aiConfig);
+
+// Custom format generation
+const customFormat = await generateCustomFormat('my-app', 'futuristic', aiConfig);
+
+// AI validation
+const validation = await validateIDWithAI('STAR-1234-VEGA', 'space project', aiConfig);
+if (validation.valid) {
+  console.log('ID is appropriate!');
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="enhanced-glass rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-yellow-300">📖 Detailed Documentation</h3>
+                    <p class="text-white/90 mb-4">Check the detailed step-by-step guide in the source code:</p>
+                    <div class="space-y-2">
+                        <p class="text-sm text-white/70">📍 <code class="bg-black/30 px-2 py-1 rounded">src/index.ts</code> - AI Integration Section</p>
+                        <p class="text-sm text-white/70">📍 <code class="bg-black/30 px-2 py-1 rounded">README.md</code> - AI Documentation</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4">
+                    <button 
+                        onclick="window.open('https://github.com/mahirliy55/stellar-id', '_blank')"
+                        class="cosmic-button bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+                    >
+                        📂 View Source Code
+                    </button>
+                    <button 
+                        onclick="closeAIModal()"
+                        class="cosmic-button bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+                    >
+                        ✨ Got it!
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script type="module">
@@ -627,6 +804,35 @@
             document.getElementById('inputText').value = randomWord;
             generateID();
         };
+        
+        // AI Modal Functions
+        window.openAIModal = function() {
+            const modal = document.getElementById('aiModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden'; // Prevent background scroll
+        };
+        
+        window.closeAIModal = function() {
+            const modal = document.getElementById('aiModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto'; // Restore scroll
+        };
+        
+        // Close modal when clicking outside
+        document.getElementById('aiModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAIModal();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAIModal();
+            }
+        });
     </script>
 </body>
 </html> 
