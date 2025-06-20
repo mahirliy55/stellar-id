@@ -1,5 +1,9 @@
 # stellar-id
 
+> **This project doesn't just show you the stars—it empowers your own projects to shine!**
+> 
+> Stellar-ID is not only a beautiful demo, but a fully reusable, plug-and-play TypeScript library. You can easily integrate its unique, astronomy-inspired ID generation functions into any of your own applications, products, or creative ideas. Let your next project reach for the stars—literally!
+
 A lightweight, zero-dependency **TypeScript library** for generating unique, deterministic star-themed IDs **using real star data from NASA/HYG astronomical databases**.
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
