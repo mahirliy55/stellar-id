@@ -42,10 +42,11 @@ function hashString(str: string): number {
   return Math.abs(hash) % 10000;
 }
 
-// Hash fonksiyonları
+// Performance optimizasyonu - Hash fonksiyonlarını optimize et
 function simpleHash(input: string): number {
   let hash = 0;
-  for (let i = 0; i < input.length; i++) {
+  const len = input.length;
+  for (let i = 0; i < len; i++) {
     const char = input.charCodeAt(i);
     hash = ((hash << 5) - hash) + char;
     hash = hash & hash;
@@ -55,7 +56,8 @@ function simpleHash(input: string): number {
 
 function djb2Hash(input: string): number {
   let hash = 5381;
-  for (let i = 0; i < input.length; i++) {
+  const len = input.length;
+  for (let i = 0; i < len; i++) {
     hash = ((hash << 5) + hash) + input.charCodeAt(i);
   }
   return Math.abs(hash);
@@ -63,7 +65,8 @@ function djb2Hash(input: string): number {
 
 function fnv1aHash(input: string): number {
   let hash = 0x811c9dc5;
-  for (let i = 0; i < input.length; i++) {
+  const len = input.length;
+  for (let i = 0; i < len; i++) {
     hash ^= input.charCodeAt(i);
     hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
   }
