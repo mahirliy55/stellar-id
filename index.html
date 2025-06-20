@@ -477,6 +477,18 @@
                 box-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
             }
         }
+        
+        /* Hide background content when AI modal is open */
+        .modal-open .content-layer {
+            opacity: 0.1;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-open .stars-container {
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
 <body class="stellar-gradient min-h-screen text-white font-sans">
@@ -811,6 +823,7 @@ if (validation.valid) {
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden'; // Prevent background scroll
+            document.body.classList.add('modal-open'); // Add modal-open class
         };
         
         window.closeAIModal = function() {
@@ -818,6 +831,7 @@ if (validation.valid) {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
             document.body.style.overflow = 'auto'; // Restore scroll
+            document.body.classList.remove('modal-open'); // Remove modal-open class
         };
         
         // Close modal when clicking outside
