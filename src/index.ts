@@ -5,9 +5,12 @@
  * Each generated ID includes a real star name from NASA/HYG databases and a hash.
  * 
  * @author Yusif Jabrayilov
- * @version 1.0.0
+ * @version 1.0.1
  * @license MIT
  * @since 2024
+ * 
+ * Enhanced with performance optimizations and better error handling
+ * Last updated: 2024-12-19
  */
 
 import { getRealStarData, getRealStarNames as getRealStarNamesFromDB, getStarInfo as getStarInfoFromDB, type StarData } from './stars-database';
