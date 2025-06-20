@@ -1,6 +1,6 @@
 # stellar-id
 
-A lightweight, zero-dependency **TypeScript library** for generating unique, deterministic star-themed IDs.
+A lightweight, zero-dependency **TypeScript library** for generating unique, deterministic star-themed IDs **using real star data from NASA/HYG astronomical databases**.
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
@@ -14,9 +14,12 @@ A lightweight, zero-dependency **TypeScript library** for generating unique, det
 - 📝 **TypeScript** - Full type support with `.d.ts` files
 - ⚡ **Simple** - Single function with minimal configuration
 - 🌟 **Star-themed** - Uses real star names (SIRIUS, VEGA, ALTAIR, etc.)
+- 🛰️ **Real Astronomical Data** - Star names and info are sourced from NASA Exoplanet Archive and HYG Database
 - 📦 **NPM Ready** - Ready to publish and install
 - 🎨 **Modern UI** - Beautiful web interface with Tailwind CSS
 - 📱 **Responsive** - Mobile-friendly design with glass morphism effects
+
+> **Note:** The star names and their properties (distance, magnitude, spectral type, constellation) are sourced from open astronomical databases such as [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/) and [HYG Database](https://astronexus.com/hyg).
 
 ## 🚀 Quick Start
 
