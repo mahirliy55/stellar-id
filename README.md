@@ -19,6 +19,8 @@ A TypeScript library for generating unique, deterministic star-themed identifier
 - **Beautiful UI**: Animated cosmic background with stars, nebulas, and planets
 - **Tailwind CSS**: Modern, responsive design
 - **TypeScript Support**: Full type definitions included
+- **Performance Optimized**: Enhanced hash algorithms and error handling
+- **Validation**: Comprehensive input and option validation
 
 ## 📦 Installation
 
