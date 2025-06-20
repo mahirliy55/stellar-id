@@ -6,6 +6,7 @@
  * 
  * @author Yusif Jabrayilov
  * @version 1.0.0
+ * @license MIT
  */
 
 const { generateStellarID, generateStellarIDAsync, getRealStarDataAsync, getRealStarNames, getStarInfo } = require('./dist/index.js');
