@@ -70,6 +70,31 @@ function fnv1aHash(input: string): number {
   return Math.abs(hash);
 }
 
+// Validation fonksiyonları
+function validateInput(input: string): void {
+  if (!input || typeof input !== 'string') {
+    throw new Error('Input must be a non-empty string');
+  }
+  if (input.length > 1000) {
+    throw new Error('Input length must be less than 1000 characters');
+  }
+}
+
+function validateOptions(options: StellarIDOptions): void {
+  if (options.length !== undefined && (options.length < 1 || options.length > 100)) {
+    throw new Error('Length must be between 1 and 100');
+  }
+  if (options.prefix && (options.prefix.length > 20 || !/^[A-Za-z0-9_-]+$/.test(options.prefix))) {
+    throw new Error('Prefix must be alphanumeric, underscore, or hyphen, max 20 characters');
+  }
+  if (options.customStarNames && (!Array.isArray(options.customStarNames) || options.customStarNames.length === 0)) {
+    throw new Error('Custom star names must be a non-empty array');
+  }
+  if (options.salt && options.salt.length > 100) {
+    throw new Error('Salt must be less than 100 characters');
+  }
+}
+
 /**
  * Generates a unique, deterministic star-themed ID based on the input string.
  * @param input - The input string to generate an ID from
@@ -80,6 +105,10 @@ function fnv1aHash(input: string): number {
  * generateStellarID('world', { prefix: 'COSMIC' }) // Returns: "COSMIC-5678-SIRIUS"
  */
 export function generateStellarID(input: string, options: StellarIDOptions = {}): string {
+  // Validation
+  validateInput(input);
+  validateOptions(options);
+  
   const { 
     prefix = 'STAR', 
     length, 
