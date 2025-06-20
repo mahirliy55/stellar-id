@@ -7,6 +7,7 @@
  * @author Yusif Jabrayilov
  * @version 1.0.0
  * @license MIT
+ * @description Space animation system
  */
 
 // Dynamic Cosmic Background Generator
