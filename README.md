@@ -147,7 +147,7 @@ node demo.js
 
 ## 📖 Code Documentation
 
-**Kod kısmında her kısım için yorumlar var!** 
+**Every section in the code has detailed comments!** 
 
 The codebase is thoroughly documented with:
 
