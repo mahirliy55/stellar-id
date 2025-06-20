@@ -26,6 +26,7 @@ interface StellarIDOptions {
   hashAlgorithm?: 'simple' | 'djb2' | 'fnv1a'; // Yeni özellik: Hash algoritması seçimi
   customStarNames?: string[]; // Yeni özellik: Özel yıldız isimleri
   format?: string; // Yeni özellik: ID formatı özelleştirme
+  salt?: string; // Yeni özellik: Salt desteği
 }
 
 /**
@@ -86,21 +87,25 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
     case: caseOption = 'upper',
     hashAlgorithm = 'simple',
     customStarNames,
-    format
+    format,
+    salt
   } = options;
+  
+  // Salt ekle
+  const saltedInput = salt ? `${input}${salt}` : input;
   
   // Hash oluştur
   let hash: number;
   switch (hashAlgorithm) {
     case 'djb2':
-      hash = djb2Hash(input);
+      hash = djb2Hash(saltedInput);
       break;
     case 'fnv1a':
-      hash = fnv1aHash(input);
+      hash = fnv1aHash(saltedInput);
       break;
     case 'simple':
     default:
-      hash = simpleHash(input);
+      hash = simpleHash(saltedInput);
       break;
   }
   
