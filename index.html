@@ -40,30 +40,13 @@
                         },
                         nebula: {
                             '0%, 100%': { opacity: '0.3', transform: 'scale(1) rotate(0deg)' },
-                            '50%': { opacity: '0.7', transform: 'scale(1.1) rotate(180deg)' },
-                        },
-                        'cosmic-pulse': {
-                            '0%, 100%': { transform: 'scale(1)', opacity: '0.8' },
-                            '50%': { transform: 'scale(1.05)', opacity: '1' },
-                        },
-                        'stellar-rotation': {
-                            '0%': { transform: 'rotate(0deg)' },
-                            '100%': { transform: 'rotate(360deg)' },
-                        },
-                        'galaxy-spin': {
-                            '0%': { transform: 'rotate(0deg) scale(1)' },
-                            '50%': { transform: 'rotate(180deg) scale(1.1)' },
-                            '100%': { transform: 'rotate(360deg) scale(1)' },
+                            '25%': { opacity: '0.5', transform: 'scale(1.1) rotate(5deg)' },
+                            '50%': { opacity: '0.4', transform: 'scale(0.9) rotate(-3deg)' },
+                            '75%': { opacity: '0.6', transform: 'scale(1.05) rotate(2deg)' },
                         },
                         pulsar: {
                             '0%, 100%': { opacity: '0.2', transform: 'scale(1)' },
                             '50%': { opacity: '1', transform: 'scale(1.5)' },
-                        },
-                        nebula: {
-                            '0%, 100%': { opacity: '0.3', transform: 'scale(1) rotate(0deg)' },
-                            '25%': { opacity: '0.5', transform: 'scale(1.1) rotate(5deg)' },
-                            '50%': { opacity: '0.4', transform: 'scale(0.9) rotate(-3deg)' },
-                            '75%': { opacity: '0.6', transform: 'scale(1.05) rotate(2deg)' },
                         },
                         aurora: {
                             '0%, 100%': { transform: 'translateX(-100%) skewX(-15deg)', opacity: '0.3' },
@@ -216,10 +199,6 @@
         }
         
         /* Cosmic Effects */
-        .cosmic-pulse {
-            animation: cosmic-pulse 4s ease-in-out infinite;
-        }
-        
         .stellar-rotation {
             animation: stellar-rotation 30s linear infinite;
         }
@@ -420,7 +399,6 @@
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
-            animation: cosmic-pulse 2s ease-in-out infinite;
         }
         
         .cosmic-button::before {
@@ -459,6 +437,21 @@
         @keyframes particle-float {
             0%, 100% { transform: translateY(0px) scale(1); opacity: 0.3; }
             50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+        }
+        
+        /* Remove Generated ID animations - make it static */
+        #generatedId {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
         }
     </style>
 </head>
@@ -593,7 +586,6 @@
             const resultText = document.getElementById('resultText');
             resultText.textContent = result;
             resultDiv.classList.remove('hidden');
-            resultDiv.classList.add('animate-pulse-slow');
         };
         
         window.generateRandom = function() {
