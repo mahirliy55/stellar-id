@@ -1,4 +1,4 @@
-// Gerçek yıldız verileri - HYG Database'den alınmış
+// Real star data - taken from HYG Database
 export interface StarData {
   name: string;
   distance?: number;
@@ -71,23 +71,40 @@ export const REAL_STARS: StarData[] = [
   { name: 'OMEGA_CENTAURI', distance: 15800, magnitude: 3.7, spectral_type: 'G5', constellation: 'Centaurus' }
 ];
 
-// Yıldız verilerini getir
-export function getRealStarData(): StarData[] {
+/**
+ * Get star data
+ * @returns Array of star data
+ */
+export async function getRealStarData(): Promise<StarData[]> {
+  // Get star data
   return REAL_STARS;
 }
 
-// Rastgele yıldız seç
+/**
+ * Get random star
+ * @returns Random star data
+ */
 export function getRandomStar(): StarData {
+  // Select random star
   const randomIndex = Math.floor(Math.random() * REAL_STARS.length);
   return REAL_STARS[randomIndex];
 }
 
-// Yıldız isimlerini getir
+/**
+ * Get star names
+ * @returns Array of star names
+ */
 export function getRealStarNames(): string[] {
+  // Get star names
   return REAL_STARS.map(star => star.name);
 }
 
-// Yıldız bilgilerini getir
+/**
+ * Get star information
+ * @param starName - Name of the star
+ * @returns Star data or null if not found
+ */
 export function getStarInfo(starName: string): StarData | null {
+  // Get star information
   return REAL_STARS.find(star => star.name === starName.toUpperCase()) || null;
 } 

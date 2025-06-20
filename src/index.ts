@@ -34,13 +34,13 @@ interface StellarIDOptions {
    * Custom prefix for the generated ID. Defaults to "STAR".
    */
   prefix?: string;
-  length?: number; // Yeni özellik: ID uzunluğu kontrolü
-  useSpecialChars?: boolean; // Yeni özellik: Özel karakterler kullan
-  case?: 'upper' | 'lower' | 'mixed'; // Yeni özellik: Büyük/küçük harf kontrolü
-  hashAlgorithm?: 'simple' | 'djb2' | 'fnv1a'; // Yeni özellik: Hash algoritması seçimi
-  customStarNames?: string[]; // Yeni özellik: Özel yıldız isimleri
-  format?: string; // Yeni özellik: ID formatı özelleştirme
-  salt?: string; // Yeni özellik: Salt desteği
+  length?: number; // New feature: ID length control
+  useSpecialChars?: boolean; // New feature: Use special characters
+  case?: 'upper' | 'lower' | 'mixed'; // New feature: Case sensitivity control
+  hashAlgorithm?: 'simple' | 'djb2' | 'fnv1a'; // New feature: Hash algorithm selection
+  customStarNames?: string[]; // New feature: Custom star names
+  format?: string; // New feature: Custom ID format
+  salt?: string; // New feature: Salt support
 }
 
 /**
@@ -58,7 +58,7 @@ function hashString(str: string): number {
   return Math.abs(hash) % 10000;
 }
 
-// Performance optimizasyonu - Hash fonksiyonlarını optimize et
+// Performance optimization - Optimize hash functions
 /**
  * Simple hash function for basic hashing
  * @param input - Input string
@@ -104,7 +104,7 @@ function fnv1aHash(input: string): number {
   return Math.abs(hash);
 }
 
-// Validation fonksiyonları
+// Validation functions
 /**
  * Validates input string
  * @param input - Input to validate
@@ -164,10 +164,10 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
     salt
   } = options;
   
-  // Salt ekle
+  // Add salt
   const saltedInput = salt ? `${input}${salt}` : input;
   
-  // Hash oluştur
+  // Create hash
   let hash: number;
   switch (hashAlgorithm) {
     case 'djb2':
@@ -182,42 +182,37 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
       break;
   }
   
-  // Hash'i 4 haneli sayıya dönüştür
+  // Convert hash to 4-digit number
   const hashNumber = hash % 10000;
   const hashString = hashNumber.toString().padStart(4, '0');
   
-  // Yıldız isimleri - gerçek veritabanından çek
-  let starNames: string[];
-  if (customStarNames && customStarNames.length > 0) {
-    starNames = customStarNames;
-  } else {
-    starNames = getRealStarNamesFromDB();
-  }
-  
+  // Star names
+  const defaultStarNames = ['SIRIUS', 'VEGA', 'ALTAIR', 'RIGEL', 'ANTARES', 'ALDEBARAN', 'BETELGEUSE', 'ARCTURUS', 'POLLUX', 'DENEB'];
+  const starNames = customStarNames && customStarNames.length > 0 ? customStarNames : defaultStarNames;
   const starIndex = hashNumber % starNames.length;
   const starName = starNames[starIndex];
   
-  // ID oluştur
+  // Create ID
   let id: string;
   
   if (format) {
-    // Özel format kullan
+    // Use custom format
     id = format
       .replace('{prefix}', prefix)
       .replace('{hash}', hashString)
       .replace('{star}', starName)
-      .replace('{input}', input.substring(0, 10)); // Input'un ilk 10 karakteri
+      .replace('{input}', input.substring(0, 10)); // First 10 characters of input
   } else {
-    // Varsayılan format
+    // Default format
     id = `${prefix}-${hashString}-${starName}`;
   }
   
-  // Eğer uzunluk belirtilmişse, ID'yi kısalt veya uzat
+  // If length is specified, shorten or extend the ID
   if (length && length > 0) {
     if (id.length > length) {
       id = id.substring(0, length);
     } else if (id.length < length) {
-      // ID'yi uzatmak için hash'e ek karakterler ekle
+      // Add extra characters to hash to extend ID
       const extraChars = useSpecialChars 
         ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?' 
         : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -228,13 +223,13 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
     }
   }
   
-  // Case sensitivity uygula
+  // Apply case sensitivity
   switch (caseOption) {
     case 'lower':
       id = id.toLowerCase();
       break;
     case 'mixed':
-      // Karışık case için bazı karakterleri küçük harf yap
+      // Make some characters lowercase for mixed case
       id = id.split('').map((char, index) => {
         if (index % 2 === 0 && /[A-Z]/.test(char)) {
           return char.toLowerCase();
@@ -244,7 +239,7 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
       break;
     case 'upper':
     default:
-      // Zaten büyük harf, değişiklik yok
+      // Already uppercase, no change needed
       break;
   }
   
@@ -254,14 +249,14 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
 // Export types for TypeScript users
 export type { StellarIDOptions };
 
-// Utility fonksiyonları
+// Utility functions
 /**
  * Validates if a string is a valid Stellar ID format
  * @param id - The ID to validate
  * @returns True if valid format
  */
 export function validateStellarID(id: string): boolean {
-  // Basit format kontrolü: PREFIX-NUMBER-STARNAME
+  // Simple format check: PREFIX-NUMBER-STARNAME
   const pattern = /^[A-Z0-9_-]+-\d{4}-[A-Z]+$/;
   return pattern.test(id);
 }
@@ -304,7 +299,7 @@ export function getAvailableHashAlgorithms(): string[] {
   return ['simple', 'djb2', 'fnv1a'];
 }
 
-// Yeni: Gerçek yıldız verilerini getir
+// New: Get real star data
 /**
  * Fetches real star data from external APIs
  * @returns Promise with star data array
@@ -313,7 +308,7 @@ export async function getRealStarDataAsync(): Promise<StarData[]> {
   return getRealStarData();
 }
 
-// Yeni: Async ID generation (gerçek yıldız isimleri ile)
+// New: Async ID generation (with real star names)
 /**
  * Asynchronous version of generateStellarID that uses real star data
  * @param input - Input string
@@ -418,7 +413,7 @@ export async function generateStellarIDAsync(input: string, options: StellarIDOp
   return id;
 }
 
-// Yeni utility fonksiyonları
+// New utility functions
 /**
  * Gets information about a specific star
  * @param starName - Name of the star
