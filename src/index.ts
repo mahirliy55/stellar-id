@@ -222,18 +222,18 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
   // Add salt
   const saltedInput = salt ? `${input}${salt}` : input;
   
-  // Create hash with caching
+  // Create hash
   let hash: number;
   switch (hashAlgorithm) {
     case 'djb2':
-      hash = djb2Hash(saltedInput, enableCache);
+      hash = djb2Hash(saltedInput);
       break;
     case 'fnv1a':
-      hash = fnv1aHash(saltedInput, enableCache);
+      hash = fnv1aHash(saltedInput);
       break;
     case 'simple':
     default:
-      hash = simpleHash(saltedInput, enableCache);
+      hash = simpleHash(saltedInput);
       break;
   }
   
@@ -241,20 +241,11 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
   const hashNumber = hash % 10000;
   const hashString = hashNumber.toString().padStart(4, '0');
   
-  // Star names with caching
-  let starName: string;
-  if (enableCache && starNamesCache.has(hashNumber)) {
-    starName = starNamesCache.get(hashNumber)!;
-  } else {
-    const defaultStarNames = ['SIRIUS', 'VEGA', 'ALTAIR', 'RIGEL', 'ANTARES', 'ALDEBARAN', 'BETELGEUSE', 'ARCTURUS', 'POLLUX', 'DENEB'];
-    const starNames = customStarNames && customStarNames.length > 0 ? customStarNames : defaultStarNames;
-    const starIndex = hashNumber % starNames.length;
-    starName = starNames[starIndex];
-    
-    if (enableCache && starNamesCache.size < CACHE_SIZE) {
-      starNamesCache.set(hashNumber, starName);
-    }
-  }
+  // Star names
+  const defaultStarNames = ['SIRIUS', 'VEGA', 'ALTAIR', 'RIGEL', 'ANTARES', 'ALDEBARAN', 'BETELGEUSE', 'ARCTURUS', 'POLLUX', 'DENEB'];
+  const starNames = customStarNames && customStarNames.length > 0 ? customStarNames : defaultStarNames;
+  const starIndex = hashNumber % starNames.length;
+  const starName = starNames[starIndex];
   
   // Create ID
   let id: string;
@@ -272,19 +263,22 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
   }
   
   // If length is specified, shorten or lengthen the ID
-  if (length !== undefined) {
-    const currentLength = id.length;
-    if (length < currentLength) {
+  if (length && length > 0) {
+    if (id.length > length) {
       id = id.substring(0, length);
-    } else if (length > currentLength) {
+    } else if (id.length < length) {
       // Add extra characters to the hash to lengthen the ID
-      const extraChars = (hash).toString(36).substring(1);
-      id += extraChars;
-      id = id.substring(0, length);
+      const extraChars = useSpecialChars 
+        ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?' 
+        : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      while (id.length < length) {
+        const extraIndex = (hashNumber + id.length) % extraChars.length;
+        id += extraChars[extraIndex];
+      }
     }
   }
   
-  // Case sensitivity
+  // Apply case sensitivity
   switch (caseOption) {
     case 'lower':
       id = id.toLowerCase();
@@ -292,12 +286,15 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
     case 'mixed':
       // Make some characters lowercase for mixed case
       id = id.split('').map((char, index) => {
-        return index % 2 === 0 ? char.toLowerCase() : char.toUpperCase();
+        if (index % 2 === 0 && /[A-Z]/.test(char)) {
+          return char.toLowerCase();
+        }
+        return char;
       }).join('');
       break;
     case 'upper':
     default:
-      // Already uppercase, no change
+      // Already uppercase, no change needed
       break;
   }
   
