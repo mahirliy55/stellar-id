@@ -21,6 +21,7 @@ A TypeScript library for generating unique, deterministic star-themed identifier
 - **TypeScript Support**: Full type definitions included
 - **Performance Optimized**: Enhanced hash algorithms and error handling
 - **Validation**: Comprehensive input and option validation
+- **Enhanced Security**: Advanced encryption and security features
 
 ## 📦 Installation
 
