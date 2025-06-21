@@ -18,4 +18,26 @@
   .stellar-input {
     @apply w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all duration-300;
   }
+}
+
+/* Stellar ID Generator Styles */
+
+/* Enhanced cosmic background */
+.cosmic-bg {
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* New animation: cosmic wave */
+@keyframes cosmic-wave {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-10px) rotate(1deg); }
+    50% { transform: translateY(-5px) rotate(-1deg); }
+    75% { transform: translateY(-15px) rotate(0.5deg); }
+}
+
+.cosmic-wave {
+    animation: cosmic-wave 8s ease-in-out infinite;
 } 
