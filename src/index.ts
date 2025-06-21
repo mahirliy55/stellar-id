@@ -194,6 +194,69 @@ function validateOptions(options: StellarIDOptions): void {
 }
 
 /**
+ * Performance monitoring interface
+ */
+export interface PerformanceMetrics {
+  generationTime: number;
+  cacheHitRate: number;
+  totalGenerations: number;
+  cacheHits: number;
+  cacheMisses: number;
+}
+
+/**
+ * Performance monitor class
+ */
+export class PerformanceMonitor {
+  private metrics: PerformanceMetrics = {
+    generationTime: 0,
+    cacheHitRate: 0,
+    totalGenerations: 0,
+    cacheHits: 0,
+    cacheMisses: 0
+  };
+
+  /**
+   * Record a generation operation
+   */
+  recordGeneration(time: number, cacheHit: boolean): void {
+    this.metrics.totalGenerations++;
+    this.metrics.generationTime = (this.metrics.generationTime + time) / 2;
+    
+    if (cacheHit) {
+      this.metrics.cacheHits++;
+    } else {
+      this.metrics.cacheMisses++;
+    }
+    
+    this.metrics.cacheHitRate = this.metrics.cacheHits / this.metrics.totalGenerations;
+  }
+
+  /**
+   * Get current performance metrics
+   */
+  getMetrics(): PerformanceMetrics {
+    return { ...this.metrics };
+  }
+
+  /**
+   * Reset performance metrics
+   */
+  reset(): void {
+    this.metrics = {
+      generationTime: 0,
+      cacheHitRate: 0,
+      totalGenerations: 0,
+      cacheHits: 0,
+      cacheMisses: 0
+    };
+  }
+}
+
+// Global performance monitor instance
+export const performanceMonitor = new PerformanceMonitor();
+
+/**
  * Generates a unique, deterministic star-themed ID based on the input string.
  * @param input - The input string to generate an ID from
  * @param options - Optional configuration for ID generation
@@ -203,6 +266,8 @@ function validateOptions(options: StellarIDOptions): void {
  * generateStellarID('world', { prefix: 'COSMIC' }) // Returns: "COSMIC-5678-SIRIUS"
  */
 export function generateStellarID(input: string, options: StellarIDOptions = {}): string {
+  const startTime = performance.now();
+  
   // Validation
   validateInput(input);
   validateOptions(options);
@@ -222,20 +287,26 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
   // Add salt
   const saltedInput = salt ? `${input}${salt}` : input;
   
-  // Create hash
+  // Create hash with cache tracking
   let hash: number;
+  let cacheHit = false;
+  
   switch (hashAlgorithm) {
     case 'djb2':
-      hash = djb2Hash(saltedInput);
+      hash = djb2Hash(saltedInput, enableCache);
       break;
     case 'fnv1a':
-      hash = fnv1aHash(saltedInput);
+      hash = fnv1aHash(saltedInput, enableCache);
       break;
     case 'simple':
     default:
-      hash = simpleHash(saltedInput);
+      hash = simpleHash(saltedInput, enableCache);
       break;
   }
+  
+  // Check if hash was cached (simplified check)
+  const cacheKey = `${hashAlgorithm}:${saltedInput}`;
+  cacheHit = hashCache.has(cacheKey);
   
   // Convert hash to 4-digit number
   const hashNumber = hash % 10000;
@@ -315,6 +386,11 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
       id = id.substring(0, length);
     }
   }
+  
+  // Record performance metrics
+  const endTime = performance.now();
+  const generationTime = endTime - startTime;
+  performanceMonitor.recordGeneration(generationTime, cacheHit);
   
   return id;
 }
@@ -553,6 +629,21 @@ export function getStarInfo(starName: string): StarData | null {
  */
 export function getRealStarNames(): string[] {
   return getRealStarNamesFromDB();
+}
+
+/**
+ * Get current performance metrics
+ * @returns Current performance metrics
+ */
+export function getPerformanceMetrics(): PerformanceMetrics {
+  return performanceMonitor.getMetrics();
+}
+
+/**
+ * Reset performance metrics
+ */
+export function resetPerformanceMetrics(): void {
+  performanceMonitor.reset();
 }
 
 // ============================================================================
