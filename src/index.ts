@@ -5,17 +5,23 @@
  * Each generated ID includes a real star name from NASA/HYG databases and a hash.
  * 
  * @author Yusif Jabrayilov
- * @version 1.0.1
+ * @version 1.1.10
  * @license MIT
  * @since 2024
  * 
  * Enhanced with performance optimizations and better error handling
- * Last updated: 2024-12-19
+ * Last updated: 2024-12-21
  * 
  * New features: Enhanced security and utility functions
+ * Performance improvements: Optimized hash functions and caching
  */
 
 import { getRealStarData, getRealStarNames as getRealStarNamesFromDB, getStarInfo as getStarInfoFromDB, type StarData } from './stars-database';
+
+// Performance optimization: Cache for frequently used values
+const CACHE_SIZE = 1000;
+const hashCache = new Map<string, number>();
+const starNamesCache = new Map<number, string>();
 
 // List of popular star names for fallback
 const STAR_NAMES = [
@@ -46,6 +52,7 @@ interface StellarIDOptions {
   customStarNames?: string[]; // New feature: Custom star names
   format?: string; // New feature: Custom ID format
   salt?: string; // New feature: Salt support
+  enableCache?: boolean; // New feature: Enable/disable caching
 }
 
 /**
@@ -63,50 +70,83 @@ function hashString(str: string): number {
   return Math.abs(hash) % 10000;
 }
 
-// Performance optimization - Optimize hash functions
+// Performance optimization - Optimized hash functions with caching
 /**
- * Simple hash function for basic hashing
+ * Simple hash function for basic hashing with caching
  * @param input - Input string
+ * @param enableCache - Whether to use caching
  * @returns Hash number
  */
-function simpleHash(input: string): number {
+function simpleHash(input: string, enableCache: boolean = true): number {
+  if (enableCache && hashCache.has(input)) {
+    return hashCache.get(input)!;
+  }
+  
   let hash = 0;
   const len = input.length;
   for (let i = 0; i < len; i++) {
     const char = input.charCodeAt(i);
     hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
+    hash = hash & hash; // Convert to 32-bit integer
   }
-  return Math.abs(hash);
+  const result = Math.abs(hash);
+  
+  if (enableCache && hashCache.size < CACHE_SIZE) {
+    hashCache.set(input, result);
+  }
+  
+  return result;
 }
 
 /**
- * DJB2 hash algorithm implementation
+ * DJB2 hash algorithm implementation with caching
  * @param input - Input string
+ * @param enableCache - Whether to use caching
  * @returns Hash number
  */
-function djb2Hash(input: string): number {
+function djb2Hash(input: string, enableCache: boolean = true): number {
+  if (enableCache && hashCache.has(input)) {
+    return hashCache.get(input)!;
+  }
+  
   let hash = 5381;
   const len = input.length;
   for (let i = 0; i < len; i++) {
     hash = ((hash << 5) + hash) + input.charCodeAt(i);
   }
-  return Math.abs(hash);
+  const result = Math.abs(hash);
+  
+  if (enableCache && hashCache.size < CACHE_SIZE) {
+    hashCache.set(input, result);
+  }
+  
+  return result;
 }
 
 /**
- * FNV-1a hash algorithm implementation
+ * FNV-1a hash algorithm implementation with caching
  * @param input - Input string
+ * @param enableCache - Whether to use caching
  * @returns Hash number
  */
-function fnv1aHash(input: string): number {
+function fnv1aHash(input: string, enableCache: boolean = true): number {
+  if (enableCache && hashCache.has(input)) {
+    return hashCache.get(input)!;
+  }
+  
   let hash = 0x811c9dc5;
   const len = input.length;
   for (let i = 0; i < len; i++) {
     hash ^= input.charCodeAt(i);
     hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
   }
-  return Math.abs(hash);
+  const result = Math.abs(hash);
+  
+  if (enableCache && hashCache.size < CACHE_SIZE) {
+    hashCache.set(input, result);
+  }
+  
+  return result;
 }
 
 // Validation functions
@@ -121,6 +161,9 @@ function validateInput(input: string): void {
   }
   if (input.length > 1000) {
     throw new Error('Input length must be less than 1000 characters');
+  }
+  if (input.trim().length === 0) {
+    throw new Error('Input cannot be empty or contain only whitespace');
   }
 }
 
@@ -141,6 +184,12 @@ function validateOptions(options: StellarIDOptions): void {
   }
   if (options.salt && options.salt.length > 100) {
     throw new Error('Salt must be less than 100 characters');
+  }
+  if (options.hashAlgorithm && !['simple', 'djb2', 'fnv1a'].includes(options.hashAlgorithm)) {
+    throw new Error('Hash algorithm must be one of: simple, djb2, fnv1a');
+  }
+  if (options.case && !['upper', 'lower', 'mixed'].includes(options.case)) {
+    throw new Error('Case must be one of: upper, lower, mixed');
   }
 }
 
@@ -166,24 +215,25 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
     hashAlgorithm = 'simple',
     customStarNames,
     format,
-    salt
+    salt,
+    enableCache = true
   } = options;
   
   // Add salt
   const saltedInput = salt ? `${input}${salt}` : input;
   
-  // Create hash
+  // Create hash with caching
   let hash: number;
   switch (hashAlgorithm) {
     case 'djb2':
-      hash = djb2Hash(saltedInput);
+      hash = djb2Hash(saltedInput, enableCache);
       break;
     case 'fnv1a':
-      hash = fnv1aHash(saltedInput);
+      hash = fnv1aHash(saltedInput, enableCache);
       break;
     case 'simple':
     default:
-      hash = simpleHash(saltedInput);
+      hash = simpleHash(saltedInput, enableCache);
       break;
   }
   
@@ -191,11 +241,20 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
   const hashNumber = hash % 10000;
   const hashString = hashNumber.toString().padStart(4, '0');
   
-  // Star names
-  const defaultStarNames = ['SIRIUS', 'VEGA', 'ALTAIR', 'RIGEL', 'ANTARES', 'ALDEBARAN', 'BETELGEUSE', 'ARCTURUS', 'POLLUX', 'DENEB'];
-  const starNames = customStarNames && customStarNames.length > 0 ? customStarNames : defaultStarNames;
-  const starIndex = hashNumber % starNames.length;
-  const starName = starNames[starIndex];
+  // Star names with caching
+  let starName: string;
+  if (enableCache && starNamesCache.has(hashNumber)) {
+    starName = starNamesCache.get(hashNumber)!;
+  } else {
+    const defaultStarNames = ['SIRIUS', 'VEGA', 'ALTAIR', 'RIGEL', 'ANTARES', 'ALDEBARAN', 'BETELGEUSE', 'ARCTURUS', 'POLLUX', 'DENEB'];
+    const starNames = customStarNames && customStarNames.length > 0 ? customStarNames : defaultStarNames;
+    const starIndex = hashNumber % starNames.length;
+    starName = starNames[starIndex];
+    
+    if (enableCache && starNamesCache.size < CACHE_SIZE) {
+      starNamesCache.set(hashNumber, starName);
+    }
+  }
   
   // Create ID
   let id: string;
@@ -265,6 +324,39 @@ export function generateStellarID(input: string, options: StellarIDOptions = {})
 
 // Export types for TypeScript users
 export type { StellarIDOptions };
+
+// Cache management functions
+/**
+ * Clears all caches used by the Stellar ID Generator
+ * @returns Number of cached items cleared
+ */
+export function clearStellarIDCaches(): number {
+  const hashCacheSize = hashCache.size;
+  const starNamesCacheSize = starNamesCache.size;
+  
+  hashCache.clear();
+  starNamesCache.clear();
+  
+  return hashCacheSize + starNamesCacheSize;
+}
+
+/**
+ * Gets cache statistics
+ * @returns Object with cache information
+ */
+export function getStellarIDCacheStats(): {
+  hashCacheSize: number;
+  starNamesCacheSize: number;
+  totalCacheSize: number;
+  maxCacheSize: number;
+} {
+  return {
+    hashCacheSize: hashCache.size,
+    starNamesCacheSize: starNamesCache.size,
+    totalCacheSize: hashCache.size + starNamesCache.size,
+    maxCacheSize: CACHE_SIZE
+  };
+}
 
 // Utility functions
 /**
