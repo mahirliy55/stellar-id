@@ -1,13 +1,16 @@
 /**
- * 🌌 Dynamic Cosmic Background Generator
+ * 🌟 Cosmic Background Animation
  * 
  * Creates an animated cosmic background with stars, shooting stars, nebulas, and planets.
- * This class generates a realistic space environment with various celestial objects.
+ * This module provides the visual effects for the Stellar ID Generator interface.
  * 
  * @author Yusif Jabrayilov
- * @version 1.0.0
+ * @version 1.1.9
  * @license MIT
- * @description Space animation system
+ * @since 2024
+ * 
+ * Enhanced with new cosmic effects and improved performance
+ * Last updated: 2024-12-21
  */
 
 // Dynamic Cosmic Background Generator
