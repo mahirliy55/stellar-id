@@ -1102,4 +1102,125 @@ export async function generateProtectedStellarURL(
 }
 
 // Export types for TypeScript users
-export type { URLShortenerConfig, URLShortenerResult }; 
+export type { URLShortenerConfig, URLShortenerResult };
+
+/**
+ * Batch generation progress callback
+ */
+export interface BatchProgressCallback {
+  (progress: {
+    current: number;
+    total: number;
+    percentage: number;
+    currentId: string;
+    completedIds: string[];
+  }): void;
+}
+
+/**
+ * Batch generation result
+ */
+export interface BatchGenerationResult {
+  ids: string[];
+  totalTime: number;
+  averageTime: number;
+  errors: Array<{ input: string; error: string }>;
+  performanceMetrics: PerformanceMetrics;
+}
+
+/**
+ * Generate multiple Stellar IDs in batch
+ * @param inputs - Array of input strings
+ * @param options - Optional configuration for ID generation
+ * @param progressCallback - Optional progress callback
+ * @returns Promise with batch generation results
+ */
+export async function generateBatchStellarIDs(
+  inputs: string[],
+  options: StellarIDOptions = {},
+  progressCallback?: BatchProgressCallback
+): Promise<BatchGenerationResult> {
+  const startTime = performance.now();
+  const results: string[] = [];
+  const errors: Array<{ input: string; error: string }> = [];
+  
+  for (let i = 0; i < inputs.length; i++) {
+    try {
+      const id = generateStellarID(inputs[i], options);
+      results.push(id);
+      
+      // Call progress callback if provided
+      if (progressCallback) {
+        progressCallback({
+          current: i + 1,
+          total: inputs.length,
+          percentage: ((i + 1) / inputs.length) * 100,
+          currentId: id,
+          completedIds: [...results]
+        });
+      }
+      
+      // Small delay to prevent blocking the main thread
+      if (i % 100 === 0) {
+        await new Promise(resolve => setTimeout(resolve, 0));
+      }
+    } catch (error) {
+      errors.push({
+        input: inputs[i],
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  }
+  
+  const endTime = performance.now();
+  const totalTime = endTime - startTime;
+  const averageTime = totalTime / inputs.length;
+  
+  return {
+    ids: results,
+    totalTime,
+    averageTime,
+    errors,
+    performanceMetrics: getPerformanceMetrics()
+  };
+}
+
+/**
+ * Generate Stellar IDs with validation and deduplication
+ * @param inputs - Array of input strings
+ * @param options - Optional configuration for ID generation
+ * @returns Promise with validated and deduplicated results
+ */
+export async function generateValidatedBatchStellarIDs(
+  inputs: string[],
+  options: StellarIDOptions = {}
+): Promise<{
+  ids: string[];
+  duplicates: string[];
+  invalid: string[];
+  validCount: number;
+}> {
+  const generatedIds = await generateBatchStellarIDs(inputs, options);
+  const uniqueIds = new Set<string>();
+  const duplicates: string[] = [];
+  const invalid: string[] = [];
+  
+  generatedIds.ids.forEach((id, index) => {
+    if (validateStellarID(id)) {
+      if (uniqueIds.has(id)) {
+        duplicates.push(id);
+      } else {
+        uniqueIds.add(id);
+      }
+    } else {
+      invalid.push(id);
+    }
+  });
+  
+  return {
+    ids: Array.from(uniqueIds),
+    duplicates,
+    invalid,
+    validCount: uniqueIds.size
+  };
+} 
