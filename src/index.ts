@@ -11,6 +11,8 @@
  * 
  * Enhanced with performance optimizations and better error handling
  * Last updated: 2024-12-19
+ * 
+ * New features: Enhanced security and utility functions
  */
 
 import { getRealStarData, getRealStarNames as getRealStarNamesFromDB, getStarInfo as getStarInfoFromDB, type StarData } from './stars-database';
