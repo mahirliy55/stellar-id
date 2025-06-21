@@ -1,6 +1,6 @@
 {
   "name": "stellar-id",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "🌟 A TypeScript library for generating unique, deterministic star-themed identifiers",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
