@@ -270,13 +270,55 @@ The library is designed with AI integration in mind! Check the code for detailed
 
 See the detailed comments in `src/index.ts` for complete implementation guide!
 
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### 🏆 Contributors
+
+Thanks goes to these wonderful people:
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/mahirliy55">
+        <img src="https://avatars.githubusercontent.com/u/mahirliy55?v=4" width="100px;" alt=""/>
+        <br />
+        <sub><b>Yusif Jabrayilov</b></sub>
+      </a>
+      <br />
+      <sub>🌟 Creator & Maintainer</sub>
+    </td>
+  </tr>
+</table>
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+### 🎯 How to Contribute
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'feat: add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+### 📋 Issue Labels
+
+- `good first issue` - Perfect for newcomers
+- `help wanted` - Extra attention needed
+- `bug` - Something isn't working
+- `enhancement` - New feature or request
+- `documentation` - Improvements to docs
+
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file for details.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📞 Support
 
