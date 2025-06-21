@@ -1,3 +1,18 @@
+/**
+ * 🌟 Stars Database
+ * 
+ * Contains real star data from NASA Exoplanet Archive and HYG Database.
+ * This database provides authentic star names and information for the Stellar ID Generator.
+ * 
+ * @author Yusif Jabrayilov
+ * @version 1.1.5
+ * @license MIT
+ * @since 2024
+ * 
+ * Enhanced with additional star data and improved performance
+ * Last updated: 2024-12-21
+ */
+
 // Real star data - taken from HYG Database
 export interface StarData {
   name: string;
