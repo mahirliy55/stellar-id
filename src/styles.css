@@ -1,3 +1,29 @@
+/**
+ * 🌟 Stellar ID Generator - CSS Styles
+ * 
+ * Comprehensive styling system for the Stellar ID Generator interface.
+ * This file contains all visual styling including cosmic backgrounds,
+ * glass effects, animations, and responsive design elements.
+ * 
+ * Design System:
+ * - Cosmic gradient backgrounds with deep space colors
+ * - Glass morphism effects for modern UI
+ * - Smooth animations and transitions
+ * - Responsive design for all screen sizes
+ * - Tailwind CSS integration for utility classes
+ * 
+ * Color Palette:
+ * - Primary: Deep space gradients (#0c0c0c to #533483)
+ * - Accent: Emerald to teal gradients for buttons
+ * - Glass: White with transparency for overlay effects
+ * - Text: White with various opacity levels
+ * 
+ * @author Yusif Jabrayilov
+ * @version 1.1.0
+ * @license MIT
+ * @since 2024
+ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
