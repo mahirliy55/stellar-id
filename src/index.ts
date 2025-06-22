@@ -14,6 +14,16 @@
  * 
  * New features: Enhanced security and utility functions
  * Performance improvements: Optimized hash functions and caching
+ * 
+ * MAIN FEATURES:
+ * - Generate unique star-themed IDs with real astronomical data
+ * - Multiple hash algorithms (simple, djb2, fnv1a)
+ * - Customizable prefixes, lengths, and formats
+ * - Performance monitoring and caching
+ * - URL shortening capabilities
+ * - Batch generation with progress tracking
+ * - Input validation and error handling
+ * - Support for custom star names and salt
  */
 
 import { getRealStarData, getRealStarNames as getRealStarNamesFromDB, getStarInfo as getStarInfoFromDB, type StarData } from './stars-database';
