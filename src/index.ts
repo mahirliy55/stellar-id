@@ -256,9 +256,20 @@ function fnv1aHash(input: string, enableCache: boolean = true): number {
 
 // Validation functions
 /**
- * Validates input string
+ * Validates input string for stellar ID generation
+ * This function performs comprehensive validation to ensure:
+ * - Input is a non-empty string
+ * - Input length is within acceptable limits
+ * - Input contains meaningful content (not just whitespace)
+ * 
+ * Validation rules:
+ * - Must be a string type
+ * - Cannot be null, undefined, or empty
+ * - Maximum length: 1000 characters
+ * - Must contain non-whitespace characters
+ * 
  * @param input - Input to validate
- * @throws Error if input is invalid
+ * @throws Error if input is invalid with descriptive message
  */
 function validateInput(input: string): void {
   if (!input || typeof input !== 'string') {
@@ -273,9 +284,20 @@ function validateInput(input: string): void {
 }
 
 /**
- * Validates options object
+ * Validates options object for stellar ID generation
+ * This function ensures all provided options are within valid ranges
+ * and conform to expected formats and constraints.
+ * 
+ * Validation includes:
+ * - Length constraints (1-100 characters)
+ * - Prefix format validation (alphanumeric, underscore, hyphen)
+ * - Custom star names array validation
+ * - Salt length validation
+ * - Hash algorithm validation
+ * - Case sensitivity validation
+ * 
  * @param options - Options to validate
- * @throws Error if options are invalid
+ * @throws Error if options are invalid with specific validation message
  */
 function validateOptions(options: StellarIDOptions): void {
   if (options.length !== undefined && (options.length < 1 || options.length > 100)) {
