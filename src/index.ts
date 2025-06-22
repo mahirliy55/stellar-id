@@ -53,20 +53,65 @@ const STAR_NAMES = [
 
 /**
  * Options for generating a Stellar ID.
+ * This interface provides comprehensive configuration options
+ * for customizing the generated stellar identifiers.
  */
 interface StellarIDOptions {
   /**
    * Custom prefix for the generated ID. Defaults to "STAR".
+   * Examples: "COSMIC", "GALAXY", "NEBULA"
    */
   prefix?: string;
-  length?: number; // New feature: ID length control
-  useSpecialChars?: boolean; // New feature: Use special characters
-  case?: 'upper' | 'lower' | 'mixed'; // New feature: Case sensitivity control
-  hashAlgorithm?: 'simple' | 'djb2' | 'fnv1a'; // New feature: Hash algorithm selection
-  customStarNames?: string[]; // New feature: Custom star names
-  format?: string; // New feature: Custom ID format
-  salt?: string; // New feature: Salt support
-  enableCache?: boolean; // New feature: Enable/disable caching
+  
+  /**
+   * Controls the length of the generated ID.
+   * Range: 1-100 characters. Default behavior uses optimal length.
+   */
+  length?: number;
+  
+  /**
+   * Enables special characters in the generated ID.
+   * When true, includes additional characters beyond alphanumeric.
+   */
+  useSpecialChars?: boolean;
+  
+  /**
+   * Controls the case sensitivity of the generated ID.
+   * Options: 'upper' (default), 'lower', 'mixed'
+   */
+  case?: 'upper' | 'lower' | 'mixed';
+  
+  /**
+   * Selects the hash algorithm for generating the numeric part.
+   * Options: 'simple' (default), 'djb2', 'fnv1a'
+   * Each algorithm provides different distribution characteristics.
+   */
+  hashAlgorithm?: 'simple' | 'djb2' | 'fnv1a';
+  
+  /**
+   * Custom array of star names to use instead of the default list.
+   * Must be a non-empty array of valid star names.
+   */
+  customStarNames?: string[];
+  
+  /**
+   * Custom format string for the ID structure.
+   * Uses placeholders: {prefix}, {hash}, {star}
+   * Example: "{star}_{hash}_{prefix}"
+   */
+  format?: string;
+  
+  /**
+   * Additional salt string to add entropy to the hash generation.
+   * Improves security and reduces collision probability.
+   */
+  salt?: string;
+  
+  /**
+   * Enables or disables the caching system for performance optimization.
+   * Default: true (enabled)
+   */
+  enableCache?: boolean;
 }
 
 /**
