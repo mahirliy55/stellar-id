@@ -138,15 +138,26 @@ function hashString(str: string): number {
 // Performance optimization - Optimized hash functions with caching
 /**
  * Simple hash function for basic hashing with caching
- * @param input - Input string
- * @param enableCache - Whether to use caching
- * @returns Hash number
+ * This function provides the same algorithm as hashString but with
+ * performance optimizations through caching. It stores computed
+ * hash values to avoid redundant calculations for repeated inputs.
+ * 
+ * Performance benefits:
+ * - O(1) lookup for cached values
+ * - Automatic cache size management
+ * - Memory-efficient storage
+ * 
+ * @param input - Input string to hash
+ * @param enableCache - Whether to use caching (default: true)
+ * @returns Hash number between 0-9999
  */
 function simpleHash(input: string, enableCache: boolean = true): number {
+  // Check cache first for performance optimization
   if (enableCache && hashCache.has(input)) {
     return hashCache.get(input)!;
   }
   
+  // Perform hash calculation
   let hash = 0;
   const len = input.length;
   for (let i = 0; i < len; i++) {
@@ -156,6 +167,7 @@ function simpleHash(input: string, enableCache: boolean = true): number {
   }
   const result = Math.abs(hash);
   
+  // Store result in cache if enabled and cache has space
   if (enableCache && hashCache.size < CACHE_SIZE) {
     hashCache.set(input, result);
   }
