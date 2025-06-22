@@ -1,7 +1,7 @@
 {
   "name": "stellar-id",
   "version": "1.2.0",
-  "description": "🌟 A TypeScript library for generating unique, deterministic star-themed identifiers",
+  "description": "🌟 A TypeScript library for generating unique, deterministic star-themed identifiers with real astronomical data integration",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
