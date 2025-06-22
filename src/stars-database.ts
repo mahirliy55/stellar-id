@@ -26,11 +26,34 @@
  */
 
 // Real star data - taken from HYG Database
+/**
+ * Interface representing astronomical data for a star
+ * This interface contains verified astronomical information
+ * sourced from professional astronomical databases.
+ * 
+ * Astronomical Properties:
+ * - name: Official star designation (usually Bayer designation)
+ * - distance: Distance from Earth in light-years
+ * - magnitude: Apparent magnitude (brightness as seen from Earth)
+ * - spectral_type: Stellar classification (e.g., A1V, G2V)
+ * - constellation: Constellation where the star is located
+ * 
+ * Data Quality:
+ * - All measurements are from verified astronomical sources
+ * - Distances are in light-years for easy comprehension
+ * - Magnitudes follow the standard astronomical scale
+ * - Spectral types follow the Harvard classification system
+ */
 export interface StarData {
+  /** Official star name (usually Bayer designation) */
   name: string;
+  /** Distance from Earth in light-years */
   distance?: number;
+  /** Apparent magnitude (brightness as seen from Earth) */
   magnitude?: number;
+  /** Stellar spectral classification (e.g., A1V, G2V, K5III) */
   spectral_type?: string;
+  /** Constellation where the star is located */
   constellation?: string;
 }
 
