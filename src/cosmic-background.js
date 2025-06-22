@@ -29,17 +29,38 @@
  */
 
 // Dynamic Cosmic Background Generator
+/**
+ * Main class for creating and managing the cosmic background animation
+ * This class handles all visual elements including stars, planets, and effects.
+ * 
+ * Configuration Options:
+ * - starCount: Number of background stars (default: 150)
+ * - shootingStarCount: Number of shooting stars (default: 8)
+ * - nebulaCount: Number of nebula clouds (default: 5, reduced to 1-2)
+ * - planetCount: Number of orbiting planets (default: 3)
+ * 
+ * Performance Considerations:
+ * - Elements are created once and animated via CSS
+ * - Random positioning ensures natural distribution
+ * - Layered rendering for optimal visual depth
+ */
 class CosmicBackground {
     /**
      * Initialize the cosmic background with configuration
+     * Sets up the container reference and configures animation parameters
+     * for optimal visual performance and aesthetic appeal.
      */
     constructor() {
+        // Reference to the main stars container element
         this.starsContainer = document.querySelector('.stars-container');
-        this.starCount = 150; // Number of stars to generate
-        this.shootingStarCount = 8; // Number of shooting stars
-        this.nebulaCount = 5; // Number of nebula clouds (reduced to 1-2)
-        this.planetCount = 3; // Number of orbiting planets
         
+        // Animation configuration for optimal performance
+        this.starCount = 150; // Number of stars to generate - balanced for performance
+        this.shootingStarCount = 8; // Number of shooting stars - creates dynamic movement
+        this.nebulaCount = 5; // Number of nebula clouds (reduced to 1-2 for less purple)
+        this.planetCount = 3; // Number of orbiting planets - adds depth to the scene
+        
+        // Initialize all cosmic elements
         this.init();
     }
     
