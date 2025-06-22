@@ -66,4 +66,14 @@
 
 .cosmic-wave {
     animation: cosmic-wave 8s ease-in-out infinite;
+}
+
+/* New animation: pulsating stars */
+@keyframes pulsating-star {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 5px #fff; }
+    50% { transform: scale(1.5); box-shadow: 0 0 20px #ffdd77; }
+}
+
+.pulsating-star {
+    animation: pulsating-star 3s ease-in-out infinite;
 } 
