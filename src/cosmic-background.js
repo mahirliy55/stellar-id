@@ -4,6 +4,21 @@
  * Creates an animated cosmic background with stars, shooting stars, nebulas, and planets.
  * This module provides the visual effects for the Stellar ID Generator interface.
  * 
+ * Animation Features:
+ * - Dynamic star field with twinkling effects
+ * - Shooting stars with realistic trails
+ * - Nebula clouds with atmospheric effects
+ * - Orbiting planets with realistic colors
+ * - Pulsar stars with rapid flashing
+ * - Constellation patterns
+ * - Performance-optimized rendering
+ * 
+ * Technical Implementation:
+ * - Uses CSS animations for smooth performance
+ * - Random generation for natural appearance
+ * - Layered effects for depth perception
+ * - Responsive design for different screen sizes
+ * 
  * @author Yusif Jabrayilov
  * @version 1.1.9
  * @license MIT
