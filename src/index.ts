@@ -36,17 +36,19 @@ const hashCache = new Map<string, number>();
 const starNamesCache = new Map<number, string>();
 
 // List of popular star names for fallback
+// These stars are commonly known and provide a reliable fallback
+// when the real star database is not available or when custom names are not provided
 const STAR_NAMES = [
-  'SIRIUS',
-  'VEGA',
-  'ALTAIR',
-  'RIGEL',
-  'ANTARES',
-  'ALDEBARAN',
-  'BETELGEUSE',
-  'ARCTURUS',
-  'POLLUX',
-  'DENEB'
+  'SIRIUS',    // Brightest star in Earth's night sky
+  'VEGA',      // Fifth brightest star, part of Summer Triangle
+  'ALTAIR',    // Twelfth brightest star, part of Summer Triangle
+  'RIGEL',     // Seventh brightest star, in Orion constellation
+  'ANTARES',   // Fifteenth brightest star, heart of Scorpius
+  'ALDEBARAN', // Fourteenth brightest star, eye of Taurus
+  'BETELGEUSE', // Tenth brightest star, shoulder of Orion
+  'ARCTURUS',  // Fourth brightest star, brightest in northern hemisphere
+  'POLLUX',    // Seventeenth brightest star, twin of Castor
+  'DENEB'      // Nineteenth brightest star, tail of Cygnus
 ] as const;
 
 /**
