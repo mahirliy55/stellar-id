@@ -34,7 +34,7 @@ Every generated ID contains:
 ## ✨ Features
 
 - **Deterministic ID Generation**: Same input always produces the same output
-- **Real Star Names**: Uses actual star data from NASA Exoplanet Archive and HYG Database
+- **Real Star Names**: Uses actual star data from NASA Exoplanet Archive and HYG Database (now with 64+ stars!)
 - **Customizable**: Prefix, length, format, and more options
 - **Multiple Hash Algorithms**: Support for different hashing methods
 - **Salt Support**: Additional security with custom salts
@@ -46,6 +46,7 @@ Every generated ID contains:
 - **Password Protection**: Secure URLs with password protection
 - **Analytics Tracking**: Built-in analytics for URL usage
 - **Beautiful UI**: Animated cosmic background with stars, nebulas, and planets
+- **New Pulsating Star Animation**: Enhanced visual effects for a more dynamic experience
 - **Tailwind CSS**: Modern, responsive design
 - **TypeScript Support**: Full type definitions included
 - **Performance Optimized**: Enhanced hash algorithms and error handling
