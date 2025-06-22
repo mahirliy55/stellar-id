@@ -2,6 +2,35 @@
 
 A TypeScript library for generating unique, deterministic star-themed identifiers. Each generated ID includes a real star name from NASA/HYG databases and a hash.
 
+## 🌌 About Stellar ID Generator
+
+The Stellar ID Generator is a unique identifier system that combines modern cryptography with the beauty of astronomy. Instead of generating random strings, this library creates meaningful identifiers using real star names from verified astronomical databases.
+
+### Astronomical Significance
+
+Every generated ID contains:
+- **Real Star Names**: Authentic star designations from NASA Exoplanet Archive and HYG Database
+- **Astronomical Data**: Distance, magnitude, spectral type, and constellation information
+- **Educational Value**: Learn about real stars while generating IDs
+- **Scientific Accuracy**: All data sourced from professional astronomical catalogs
+
+### Why Star-Themed IDs?
+
+- **Memorable**: Star names are easier to remember than random strings
+- **Educational**: Each ID teaches you about a real astronomical object
+- **Beautiful**: Creates a connection between technology and the cosmos
+- **Unique**: Combines deterministic hashing with astronomical diversity
+- **Scalable**: 61+ verified stars with room for expansion
+
+### Use Cases
+
+- **Project Identifiers**: Give your projects cosmic names
+- **User Sessions**: Create memorable session tokens
+- **Document References**: Generate meaningful document IDs
+- **API Endpoints**: Beautiful and descriptive endpoint identifiers
+- **Database Keys**: Human-readable primary keys
+- **URL Shortening**: Create shareable cosmic URLs
+
 ## ✨ Features
 
 - **Deterministic ID Generation**: Same input always produces the same output
