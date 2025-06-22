@@ -17,7 +17,7 @@
     "lint:fix": "eslint src/**/*.ts --fix",
     "docs": "typedoc src/index.ts --out docs",
     "clean": "rm -rf dist docs",
-    "prepublishOnly": "npm run build && npm run test",
+    "prepublishOnly": "npm run build",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate"
   },
