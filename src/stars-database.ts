@@ -4,6 +4,18 @@
  * Contains real star data from NASA Exoplanet Archive and HYG Database.
  * This database provides authentic star names and information for the Stellar ID Generator.
  * 
+ * Data Sources:
+ * - HYG Database (Hipparcos, Yale, Gliese): Comprehensive star catalog
+ * - NASA Exoplanet Archive: Verified astronomical data
+ * - SIMBAD Astronomical Database: Cross-referenced information
+ * 
+ * Database Features:
+ * - 61 real stars with verified astronomical data
+ * - Distance measurements in light-years
+ * - Apparent magnitude values
+ * - Spectral type classifications
+ * - Constellation associations
+ * 
  * @author Yusif Jabrayilov
  * @version 1.1.5
  * @license MIT
