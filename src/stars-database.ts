@@ -141,7 +141,10 @@ export const REAL_STARS: StarData[] = [
   { name: 'PHI_CENTAURI', distance: 465, magnitude: 3.83, spectral_type: 'B2IV', constellation: 'Centaurus' },
   { name: 'CHI_CENTAURI', distance: 384, magnitude: 4.36, spectral_type: 'B2V', constellation: 'Centaurus' },
   { name: 'PSI_CENTAURI', distance: 247, magnitude: 4.05, spectral_type: 'A0V', constellation: 'Centaurus' },
-  { name: 'OMEGA_CENTAURI', distance: 15800, magnitude: 3.7, spectral_type: 'G5', constellation: 'Centaurus' }
+  { name: 'OMEGA_CENTAURI', distance: 15800, magnitude: 3.7, spectral_type: 'G5', constellation: 'Centaurus' },
+  { name: 'PROXIMA_CENTAURI', distance: 4.2, magnitude: 11.05, spectral_type: 'M5.5Ve', constellation: 'Centaurus' },
+  { name: 'BARNARDS_STAR', distance: 6, magnitude: 9.53, spectral_type: 'M4.0Ve', constellation: 'Ophiuchus' },
+  { name: 'WOLF_359', distance: 7.8, magnitude: 13.5, spectral_type: 'M6.5Ve', constellation: 'Leo' }
 ];
 
 /**
