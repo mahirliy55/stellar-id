@@ -177,22 +177,36 @@ function simpleHash(input: string, enableCache: boolean = true): number {
 
 /**
  * DJB2 hash algorithm implementation with caching
- * @param input - Input string
- * @param enableCache - Whether to use caching
+ * The DJB2 algorithm is a non-cryptographic hash function that:
+ * - Uses a magic number (5381) as the initial hash value
+ * - Multiplies the hash by 33 (equivalent to (hash << 5) + hash)
+ * - Adds the character code of each character
+ * - Provides good distribution for string hashing
+ * 
+ * Advantages:
+ * - Fast computation
+ * - Good avalanche effect
+ * - Low collision rate for typical strings
+ * 
+ * @param input - Input string to hash
+ * @param enableCache - Whether to use caching (default: true)
  * @returns Hash number
  */
 function djb2Hash(input: string, enableCache: boolean = true): number {
+  // Check cache first for performance optimization
   if (enableCache && hashCache.has(input)) {
     return hashCache.get(input)!;
   }
   
-  let hash = 5381;
+  // DJB2 algorithm implementation
+  let hash = 5381; // Magic number for DJB2
   const len = input.length;
   for (let i = 0; i < len; i++) {
     hash = ((hash << 5) + hash) + input.charCodeAt(i);
   }
   const result = Math.abs(hash);
   
+  // Store result in cache if enabled and cache has space
   if (enableCache && hashCache.size < CACHE_SIZE) {
     hashCache.set(input, result);
   }
