@@ -4,9 +4,26 @@
  * This demo showcases the various features of the stellar-id library.
  * It demonstrates ID generation, custom options, and real star data integration.
  * 
+ * Demo Features:
+ * - Basic stellar ID generation with different inputs
+ * - Custom prefix and formatting options
+ * - Advanced features like length control and case sensitivity
+ * - URL shortening capabilities with various configurations
+ * - Real star database integration and astronomical data
+ * - Batch processing and performance testing
+ * 
+ * Usage Examples:
+ * - Project identifier generation
+ * - User session management
+ * - Document reference systems
+ * - Custom branding and formatting
+ * - Astronomical data exploration
+ * 
  * @author Yusif Jabrayilov
  * @version 1.0.0
  * @license MIT
+ * 
+ * Run this demo with: node demo.js
  */
 
 const { generateStellarID, generateStellarIDAsync, getRealStarDataAsync, getRealStarNames, getStarInfo, generateStellarURL, generateBatchStellarURLs, generateBrandedStellarURL, generateTemporaryStellarURL, generateProtectedStellarURL } = require('./dist/index.js');
