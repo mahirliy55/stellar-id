@@ -29,6 +29,8 @@
 import { getRealStarData, getRealStarNames as getRealStarNamesFromDB, getStarInfo as getStarInfoFromDB, type StarData } from './stars-database';
 
 // Performance optimization: Cache for frequently used values
+// This cache system improves performance by storing computed hash values
+// and star name mappings to avoid redundant calculations
 const CACHE_SIZE = 1000;
 const hashCache = new Map<string, number>();
 const starNamesCache = new Map<number, string>();
