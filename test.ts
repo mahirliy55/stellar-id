@@ -26,7 +26,7 @@
  * Run with: npx ts-node test.ts
  */
 
-import { generateStellarID, type StellarIDOptions } from './src/index';
+import { generateStellarID, type StellarIDOptions, validateInput, validateOptions } from './src/index';
 
 console.log('🌟 Testing stellar-id library (TypeScript)\n');
 
@@ -46,4 +46,64 @@ const testInputs = [
 
 testInputs.forEach(input => {
   console.log(`${input} => ${generateStellarID(input)}`);
-}); 
+});
+
+// --- Validation Function Tests ---
+console.log('\n🧪 Testing validation functions...');
+
+function runTest(name, testFn) {
+  try {
+    testFn();
+    console.log(`✅ [PASS] ${name}`);
+  } catch (e) {
+    console.error(`❌ [FAIL] ${name}`, e.message);
+  }
+}
+
+// Tests for validateInput
+runTest('validateInput: should accept a valid string', () => {
+  validateInput('valid-string');
+});
+
+runTest('validateInput: should throw on empty string', () => {
+  try {
+    validateInput('');
+    throw new Error('Test failed: Expected an error for empty string');
+  } catch (e) {
+    if (e.message !== 'Input must be a non-empty string') throw e;
+  }
+});
+
+runTest('validateInput: should throw on null input', () => {
+  try {
+    validateInput(null);
+    throw new Error('Test failed: Expected an error for null input');
+  } catch (e) {
+    if (e.message !== 'Input must be a non-empty string') throw e;
+  }
+});
+
+// Tests for validateOptions
+runTest('validateOptions: should accept valid options', () => {
+  validateOptions({ prefix: 'TEST', length: 10 });
+});
+
+runTest('validateOptions: should throw on invalid prefix', () => {
+  try {
+    validateOptions({ prefix: 'INVALID PREFIX!' });
+    throw new Error('Test failed: Expected an error for invalid prefix');
+  } catch (e) {
+    if (!e.message.includes('Prefix must be alphanumeric')) throw e;
+  }
+});
+
+runTest('validateOptions: should throw on invalid length', () => {
+  try {
+    validateOptions({ length: 999 });
+    throw new Error('Test failed: Expected an error for invalid length');
+  } catch (e) {
+    if (!e.message.includes('Length must be between 1 and 100')) throw e;
+  }
+});
+
+console.log('\nValidation tests complete.'); 
