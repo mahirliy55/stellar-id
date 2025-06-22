@@ -57,7 +57,30 @@ export interface StarData {
   constellation?: string;
 }
 
+/**
+ * Comprehensive database of real stars with verified astronomical data
+ * This array contains 61 stars selected for their significance and visibility.
+ * 
+ * Star Selection Criteria:
+ * - Bright stars visible to the naked eye
+ * - Well-known stars from popular constellations
+ * - Stars with reliable astronomical measurements
+ * - Geographic distribution across the sky
+ * 
+ * Data Organization:
+ * - Stars are ordered by apparent magnitude (brightest first)
+ * - Each entry includes complete astronomical information
+ * - Names follow standard astronomical nomenclature
+ * - Distances are in light-years for accessibility
+ * 
+ * Notable Stars Included:
+ * - Sirius: Brightest star in Earth's night sky
+ * - Vega: Fifth brightest star, part of Summer Triangle
+ * - Polaris: North Star, important for navigation
+ * - Alpha Centauri: Closest star system to Earth
+ */
 export const REAL_STARS: StarData[] = [
+  // Brightest stars in the night sky
   { name: 'SIRIUS', distance: 8.6, magnitude: -1.46, spectral_type: 'A1V', constellation: 'Canis Major' },
   { name: 'CANOPUS', distance: 310, magnitude: -0.74, spectral_type: 'F0II', constellation: 'Carina' },
   { name: 'ARCTURUS', distance: 37, magnitude: -0.05, spectral_type: 'K1.5III', constellation: 'Boötes' },
