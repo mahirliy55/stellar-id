@@ -116,6 +116,12 @@ interface StellarIDOptions {
 
 /**
  * Simple string hash function that generates a number between 0 and 9999
+ * This function uses a basic hash algorithm that:
+ * - Shifts the hash left by 5 bits and subtracts the hash
+ * - Adds the character code of each character
+ * - Converts to 32-bit integer to prevent overflow
+ * - Returns absolute value modulo 10000 for consistent range
+ * 
  * @param str - Input string to hash
  * @returns Hash number between 0-9999
  */
