@@ -216,16 +216,29 @@ function djb2Hash(input: string, enableCache: boolean = true): number {
 
 /**
  * FNV-1a hash algorithm implementation with caching
- * @param input - Input string
- * @param enableCache - Whether to use caching
+ * The FNV-1a algorithm is a non-cryptographic hash function that:
+ * - Uses the FNV prime (0x01000193) and offset basis (0x811c9dc5)
+ * - XORs the hash with each byte, then multiplies by the prime
+ * - Provides excellent distribution and low collision rates
+ * - Is widely used in hash tables and checksums
+ * 
+ * Cryptographic properties:
+ * - Good avalanche effect (small input changes cause large output changes)
+ * - Uniform distribution across the hash space
+ * - Fast computation suitable for real-time applications
+ * 
+ * @param input - Input string to hash
+ * @param enableCache - Whether to use caching (default: true)
  * @returns Hash number
  */
 function fnv1aHash(input: string, enableCache: boolean = true): number {
+  // Check cache first for performance optimization
   if (enableCache && hashCache.has(input)) {
     return hashCache.get(input)!;
   }
   
-  let hash = 0x811c9dc5;
+  // FNV-1a algorithm implementation
+  let hash = 0x811c9dc5; // FNV offset basis
   const len = input.length;
   for (let i = 0; i < len; i++) {
     hash ^= input.charCodeAt(i);
@@ -233,6 +246,7 @@ function fnv1aHash(input: string, enableCache: boolean = true): number {
   }
   const result = Math.abs(hash);
   
+  // Store result in cache if enabled and cache has space
   if (enableCache && hashCache.size < CACHE_SIZE) {
     hashCache.set(input, result);
   }
