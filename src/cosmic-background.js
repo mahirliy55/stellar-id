@@ -65,6 +65,20 @@ class CosmicBackground {
     }
     
     /**
+     * Helper function to create and append a cosmic element
+     * @param {string} tag - The HTML tag for the element
+     * @param {string} className - The CSS class name
+     * @param {string} cssText - The inline CSS styles
+     */
+    createElement(tag, className, cssText) {
+        const element = document.createElement(tag);
+        element.className = className;
+        element.style.cssText = cssText;
+        this.starsContainer.appendChild(element);
+        return element;
+    }
+    
+    /**
      * Initialize all cosmic elements
      */
     init() {
@@ -83,7 +97,6 @@ class CosmicBackground {
      */
     createStars() {
         for (let i = 0; i < this.starCount; i++) {
-            const star = document.createElement('div');
             const size = Math.random() > 0.8 ? 'large' : Math.random() > 0.5 ? 'medium' : 'small';
             const top = Math.random() * 100;
             const left = Math.random() * 100;
@@ -91,13 +104,12 @@ class CosmicBackground {
             const duration = 2 + Math.random() * 3;
             const twinkleType = Math.random() > 0.7 ? 'pulsar' : 'normal';
             
-            star.className = `star ${size} ${twinkleType}`;
-            star.style.cssText = `
+            const star = this.createElement('div', `star ${size} ${twinkleType}`, `
                 top: ${top}%;
                 left: ${left}%;
                 animation-delay: ${delay}s;
                 animation-duration: ${duration}s;
-            `;
+            `);
             
             // Add random colors to some stars
             if (Math.random() > 0.9) {
@@ -107,8 +119,6 @@ class CosmicBackground {
             } else if (Math.random() > 0.7) {
                 star.style.background = '#FF69B4'; // Pink
             }
-            
-            this.starsContainer.appendChild(star);
         }
     }
     
@@ -118,21 +128,17 @@ class CosmicBackground {
      */
     createShootingStars() {
         for (let i = 0; i < this.shootingStarCount; i++) {
-            const shootingStar = document.createElement('div');
             const top = Math.random() * 100;
             const delay = Math.random() * 20;
             const duration = 2 + Math.random() * 4;
             const angle = Math.random() * 45;
             
-            shootingStar.className = 'shooting-star';
-            shootingStar.style.cssText = `
+            this.createElement('div', 'shooting-star', `
                 top: ${top}%;
                 animation-delay: ${delay}s;
                 animation-duration: ${duration}s;
                 transform: rotate(${angle}deg);
-            `;
-            
-            this.starsContainer.appendChild(shootingStar);
+            `);
         }
     }
     
@@ -144,24 +150,20 @@ class CosmicBackground {
         // Mor nebula sayısını azalt
         const nebulaCount = 1 + Math.floor(Math.random() * 2); // 1 veya 2
         for (let i = 0; i < nebulaCount; i++) {
-            const nebula = document.createElement('div');
             const top = Math.random() * 100;
             const left = Math.random() * 100;
             const size = 150 + Math.random() * 300;
             const delay = Math.random() * 15;
             const duration = 10 + Math.random() * 20;
             
-            nebula.className = 'nebula nebula-enhanced';
-            nebula.style.cssText = `
+            this.createElement('div', 'nebula nebula-enhanced', `
                 top: ${top}%;
                 left: ${left}%;
                 width: ${size}px;
                 height: ${size}px;
                 animation-delay: ${delay}s;
                 animation-duration: ${duration}s;
-            `;
-            
-            this.starsContainer.appendChild(nebula);
+            `);
         }
     }
     
