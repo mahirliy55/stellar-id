@@ -19,7 +19,8 @@
     "clean": "rm -rf dist docs",
     "prepublishOnly": "npm run build",
     "contributors:add": "all-contributors add",
-    "contributors:generate": "all-contributors generate"
+    "contributors:generate": "all-contributors generate",
+    "prepare": "husky"
   },
   "keywords": [
     "typescript",
@@ -43,9 +44,14 @@
   "bugs": {
     "url": "https://github.com/mahirliy55/stellar-id/issues"
   },
+  "lint-staged": {
+    "**/*.{ts,js,json,md,css}": "prettier --write"
+  },
   "devDependencies": {
     "@types/node": "^20.11.25",
     "autoprefixer": "^10.4.21",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.10",
     "tsup": "^8.0.2",
